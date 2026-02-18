@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>LoL 피지컬 트레이너 </title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #1a1a1d;
+            color: #c5c5c5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            user-select: none; /* 텍스트 드래그 방지 */
+        }
+        h1 { margin-bottom: 10px; color: #f0e6d2; text-shadow: 0 0 10px #c8aa6e; }
+        #gameCanvas {
+            border: 2px solid #4a4a4a;
+            background-color: #0e0e10;
+            cursor: crosshair;
+            box-shadow: 0 0 30px rgba(0, 200, 255, 0.1);
+        }
+        #ui-layer {
+            position: absolute;
+            top: 30px;
+            text-align: center;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .score { font-size: 28px; font-weight: bold; color: #00ffcc; margin-bottom: 5px; }
+        .message { font-size: 18px; color: #ff5555; }
+        .info { font-size: 14px; color: #888; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="ui-layer">
+        <h1>LoL 피지컬 트레이너</h1>
+        <div class="score">점수: <span id="scoreVal">0</span> | 남은 기회: <span id="lifeVal">5</span></div>
+        <div class="message" id="msg">스페이스바를 눌러 시작하세요!</div>
+        <div class="info">Q, W, E, R, A (자주 나옴) / D, F, 1, 2, 3 (가끔 나옴)</div>
+    </div>
+
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('scoreVal');
+        const lifeEl = document.getElementById('lifeVal');
+        const msgEl = document.getElementById('msg');
+
+        let score = 0;
+        let lives = 5;
+        let isPlaying = false;
+        let gameLoopId;
+        
+        let target = {
+            x: 0, y: 0, radius: 40, key: '', 
+            creationTime: 0, lifeTime: 2000 
+        };
+
+        // ★ 핵심 변경 사항: 확률 조작을 위한 '주머니' 만들기 ★
+        // 이 배열 안에 많이 들어있는 글자일수록 게임에 자주 나옵니다.
+        const keyPool = [
+            // 높은 빈도 (QWER + A) : 각각 4개씩 넣음 -> 약 80%
+            'Q', 'Q', 'Q', 'Q',
+            'W', 'W', 'W', 'W',
+            'E', 'E', 'E', 'E',
+            'R', 'R', 'R', 'R',
+            'A', 'A', 'A', 'A', 'A', // A는 중요하니까 5개!
+            
+            // 낮은 빈도 (DF + 123) : 각각 1개씩 넣음 -> 약 20%
+            'D', 'F', '1', '2', '3'
+        ];
+        
+        // 마우스 위치
+        let mouse = { x: 0, y: 0 };
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !isPlaying) {
+                startGame();
+                return;
+            }
+            if (!isPlaying) return;
+
+            const pressedKey = e.key.toUpperCase();
+            
+            // 키보드 눌렀을 때 마우스가 원 안에 있는지 확인
+            const dist = Math.hypot(mouse.x - target.x, mouse.y - target.y);
+
+            if (dist < target.radius) {
+                // 정확한 키를 눌렀는지 확인
+                if (pressedKey === target.key) {
+                    successHit();
+                } else {
+                    // 원 안에서 틀린 키를 누르면? (선택사항: 감점 혹은 무반응)
+                    // 현재는 그냥 넘어감
+                }
+            }
+        });
+
+        function startGame() {
+            score = 0;
+            lives = 5;
+            isPlaying = true;
+            msgEl.innerText = "Target을 조준하고 키를 누르세요!";
+            updateUI();
+            spawnTarget();
+            loop();
+        }
+
+        function spawnTarget() {
+            // 랜덤 위치 (가장자리 여백 60px)
+            target.x = 60 + Math.random() * (canvas.width - 120);
+            target.y = 60 + Math.random() * (canvas.height - 120);
+            
+            // ★ 확률이 조작된 keyPool에서 하나 뽑기 ★
+            const randomIndex = Math.floor(Math.random() * keyPool.length);
+            target.key = keyPool[randomIndex];
+            
+            target.creationTime = Date.now();
+            
+            // 난이도 조절: 점수가 높을수록 시간이 빨리 줄어듦 (최소 0.6초)
+            target.lifeTime = Math.max(600, 2000 - (score * 10));
+        }
+
+        function successHit() {
+            score += 10;
+            spawnTarget();
+            updateUI();
+        }
+
+        function loop() {
+            if (!isPlaying) return;
+
+            // 1. 화면 지우기
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 2. 시간 초과 체크
+            const now = Date.now();
+            if (now - target.creationTime > target.lifeTime) {
+                lives--;
+                updateUI();
+                if (lives <= 0) {
+                    gameOver();
+                    return;
+                }
+                spawnTarget(); // 놓친 건 보내주고 새로 생성
+            }
+
+            // 3. 원 그리기 (디자인 개선)
+            // 외곽선
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
+            
+            // 색상 구분: 스펠/아이템은 노란색, 스킬은 청록색
+            if (['D', 'F', '1', '2', '3'].includes(target.key)) {
+                ctx.fillStyle = '#e6c200'; // Gold/Yellow
+            } else {
+                ctx.fillStyle = '#0ac8b9'; // Jinx Blue
+            }
+            
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#fff';
+            ctx.stroke();
+
+            // 4. 글자 그리기
+            ctx.fillStyle = '#111'; // 글자색 검정으로 변경 (가독성 UP)
+            ctx.font = 'bold 36px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(target.key, target.x, target.y);
+
+            // 5. 타이머 게이지 (원 테두리에 빨간색으로 줄어듦)
+            const timeLeftRatio = 1 - (now - target.creationTime) / target.lifeTime;
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.radius + 5, -Math.PI/2, (-Math.PI/2) + (Math.PI * 2 * timeLeftRatio));
+            ctx.strokeStyle = '#ff3333';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            gameLoopId = requestAnimationFrame(loop);
+        }
+
+        function updateUI() {
+            scoreEl.innerText = score;
+            lifeEl.innerText = lives;
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#ff5555';
+            ctx.font = 'bold 40px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText("GAME OVER", canvas.width/2, canvas.height/2 - 20);
+            
+            ctx.fillStyle = '#fff';
+            ctx.font = '20px Arial';
+            ctx.fillText(`최종 점수: ${score}점`, canvas.width/2, canvas.height/2 + 30);
+            ctx.fillText(`[스페이스바]를 눌러 다시 도전`, canvas.width/2, canvas.height/2 + 70);
+        }
+    </script>
+</body>
+</html>
