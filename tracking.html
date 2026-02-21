@@ -8,33 +8,29 @@
     <style>
         body { margin: 0; background-color: #121212; color: #e0e0e0; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; user-select: none; }
         
-        /* 위쪽 여백을 확 줄였습니다 */
-        .container { max-width: 1200px; margin: 0 auto; padding: 10px 20px; display: flex; flex-direction: column; align-items: center; }
+        /* 상단 여백 극한 압축 */
+        .container { max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; flex-direction: column; align-items: center; }
         header { text-align: center; margin-bottom: 10px; width: 100%; position: relative; }
-        h1 { color: #00ffcc; text-shadow: 0 0 15px rgba(0, 255, 204, 0.4); margin: 0; font-size: 2.2rem; word-break: keep-all; }
-        .subtitle { color: #aaa; font-size: 0.95rem; margin-top: 5px; }
+        h1 { color: #00ffcc; text-shadow: 0 0 15px rgba(0, 255, 204, 0.4); margin: 0; font-size: 2rem; word-break: keep-all; }
+        .subtitle { color: #aaa; font-size: 0.95rem; margin-top: 3px; }
 
-        .nav-menu { margin-top: 10px; display: flex; gap: 15px; justify-content: center; align-items: center; }
+        .nav-menu { margin-top: 8px; display: flex; gap: 15px; justify-content: center; align-items: center; }
         .nav-btn { background: #222; color: #fff; border: 1px solid #444; padding: 6px 18px; border-radius: 20px; text-decoration: none; font-weight: bold; transition: 0.2s; font-size: 15px; }
         .nav-btn:hover { background: #333; border-color: #00ffcc; color: #00ffcc; }
         .nav-btn.active { background: #00ffcc; color: #000; border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.5); }
 
-        .status-board { text-align: center; margin-bottom: 10px; z-index: 10; }
-        .score-board { font-size: 22px; font-weight: 800; color: #fff; text-shadow: 2px 2px 0px #000; margin-bottom: 5px; }
-        .best-score { font-size: 14px; color: #ffd700; font-weight: bold; text-shadow: 1px 1px 2px #000; margin-bottom: 5px; }
+        .status-board { text-align: center; margin-bottom: 12px; z-index: 10; }
+        .score-board { font-size: 22px; font-weight: 800; color: #fff; text-shadow: 2px 2px 0px #000; margin-bottom: 3px; }
+        .best-score { font-size: 14px; color: #ffd700; font-weight: bold; text-shadow: 1px 1px 2px #000; margin-bottom: 3px; }
         .tier-badge { display: inline-block; padding: 4px 12px; border-radius: 15px; background-color: #333; color: #fff; font-weight: bold; font-size: 14px; border: 1px solid #555; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
 
-        /* 화면 비율에 맞춰 자동으로 크기가 줄어들도록 설정 */
+        /* 게임 영역: 축소 코드 제거, 원래 크기 100% 유지 */
         .game-area { 
-            position: relative; margin: 0 auto 40px auto; width: fit-content; 
+            position: relative; margin-bottom: 40px; 
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.6); border-radius: 4px; overflow: hidden; background-color: #0e0e10; 
         }
-        canvas { 
-            display: block; max-width: 100vw; max-height: 55vh; width: auto; height: auto; 
-            border: 1px solid #333; cursor: crosshair; 
-        }
+        canvas { display: block; border: 1px solid #333; cursor: crosshair; }
 
-        /* 팝업창 살짝 위로 이동 (top: 42%) */
         .message-box {
             background-color: rgba(0, 0, 0, 0.92); padding: 35px; border-radius: 15px; border: 1px solid #444;
             position: absolute; top: 42%; left: 50%; transform: translate(-50%, -50%);
@@ -69,6 +65,7 @@
         .comment-section { margin-top: 50px; width: 100%; max-width: 800px; padding: 20px; background: #1a1a1d; border-radius: 10px; }
         footer { margin-top: 60px; padding: 30px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #222; width: 100%; }
     </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9819985404574274" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -202,7 +199,7 @@
         let mouse = { x: 0, y: 0 };
         const safeTopMargin = 0;
 
-        // 캔버스가 작아져도 좌표를 완벽하게 인식하는 비율 보정 코드
+        // 원본 크기를 복구했으므로 정밀 좌표 보정 코드 적용
         function updateMousePos(e) {
             const rect = canvas.getBoundingClientRect();
             const scaleX = canvas.width / rect.width;
@@ -242,7 +239,7 @@
 
         canvas.addEventListener('mousedown', (e) => {
             if (!isPlaying) return;
-            updateMousePos(e); // 클릭 시점에 좌표 한 번 더 정확하게 동기화
+            updateMousePos(e); 
             
             let pressedBtn = '';
             if (e.button === 0) pressedBtn = '좌클릭';
