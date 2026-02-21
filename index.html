@@ -9,9 +9,16 @@
         /* 기본 스타일 */
         body { margin: 0; background-color: #121212; color: #e0e0e0; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; user-select: none; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        header { text-align: center; margin-bottom: 20px; }
+        
+        header { text-align: center; margin-bottom: 20px; width: 100%; position: relative; }
         h1 { color: #00ffcc; text-shadow: 0 0 15px rgba(0, 255, 204, 0.4); margin: 0; font-size: 2.5rem; word-break: keep-all; }
         .subtitle { color: #aaa; font-size: 1rem; margin-top: 10px; }
+
+        /* 네비게이션 메뉴 (새로 추가됨) */
+        .nav-menu { margin-top: 15px; display: flex; gap: 15px; justify-content: center; }
+        .nav-btn { background: #222; color: #fff; border: 1px solid #444; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; transition: 0.2s; }
+        .nav-btn:hover { background: #333; border-color: #00ffcc; color: #00ffcc; }
+        .nav-btn.active { background: #00ffcc; color: #000; border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.5); }
 
         .game-area {
             position: relative;
@@ -70,6 +77,7 @@
         .input-group { margin: 15px 0; display: flex; gap: 10px; justify-content: center; }
         select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; }
         input[type="text"] { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 16px; width: 180px; text-align: center; }
+        select:focus, input[type="text"]:focus { outline: none; border-color: #00ffcc; }
         
         .btn {
             background: #00ffcc; color: #000; border: none; padding: 12px 24px; border-radius: 5px;
@@ -127,16 +135,21 @@
         footer { margin-top: 60px; padding: 30px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #222; width: 100%; }
         .beta-tag { color: #ff5555; font-weight: bold; font-size: 12px; border: 1px solid #ff5555; padding: 2px 6px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
     </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9819985404574274"
-     crossorigin="anonymous"></script>
-</head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9819985404574274" crossorigin="anonymous"></script>
+    
+    </head>
 <body>
 
     <div class="container">
         <header>
             <h1>LoL 피지컬 트레이너 <span class="beta-tag">BETA</span></h1>
             <div class="subtitle">실전 무빙 트래킹(Tracking) · 반응속도 · 정확도</div>
-        </header>
+            
+            <div class="nav-menu">
+                <a href="index.html" class="nav-btn active">기본 트래킹 훈련</a>
+                <a href="kiting.html" class="nav-btn">실전 카이팅 훈련</a>
+            </div>
+            </header>
 
         <div class="game-area">
             <div id="ui-layer">
@@ -154,7 +167,7 @@
                             <option value="JP">JP</option>
                             <option value="ETC">ETC</option>
                         </select>
-                        <input type="text" id="riotIdInput" placeholder="소환사명 (예: Hide on bush#KR1)">
+                        <input type="text" id="riotIdInput" placeholder="소환사명 (최대 8자)" maxlength="8">
                     </div>
                     <button class="btn" onclick="startGame()">훈련 시작 (스페이스바)</button>
                     <p style="font-size:13px; color:#888; margin-top:15px;">*입력한 ID는 결과 화면에 표시됩니다.</p>
@@ -194,11 +207,11 @@
         </div>
 
         <article class="content-section">
-            <h2>당신의 진짜 티어는?</h2>
+            <h2>팩트 폭격: 당신의 진짜 티어는?</h2>
             <p>상대 챔피언은 가만히 서서 맞아주지 않습니다. 머리로는 이미 챌린저인데 무빙 치는 적을 클릭하지 못해 방생하시나요?<br>
             뇌지컬로 포장하는 것도 한계가 있습니다. 이 트레이너는 타협 없는 숫자로 당신의 진짜 피지컬 현주소를 보여줍니다.</p>
             
-            <h3>티어별 설명 (목표 점수)</h3>
+            <h3>티어별 팩트 체크 (목표 점수)</h3>
             <ul>
                 <li><span style="color:#00ffcc">CHALLENGER (2500+)</span>: 괴물. 무빙을 예측해서 찍어누르는 프로게이머 수준.</li>
                 <li><span style="color:#f35588">GRANDMASTER (2000~2490)</span>: 어디 가서 손가락 탓할 일 없는 상위 0.1% 피지컬.</li>
@@ -253,8 +266,9 @@
         let bestScore = localStorage.getItem('lol_best_score') || 0;
         bestScoreEl.innerText = bestScore;
         
-        let savedId = localStorage.getItem('lol_riot_id') || "";
-        let savedRegion = localStorage.getItem('lol_riot_region') || "KR";
+        // kiting.html과 동일한 키(lol_name, lol_server)로 변경하여 연동되게 수정
+        let savedId = localStorage.getItem('lol_name') || "";
+        let savedRegion = localStorage.getItem('lol_server') || "KR";
         riotIdInput.value = savedId;
         regionSelect.value = savedRegion;
         
@@ -316,8 +330,9 @@
             const idVal = riotIdInput.value.trim();
             const regionVal = regionSelect.value;
             
-            if(idVal) localStorage.setItem('lol_riot_id', idVal);
-            localStorage.setItem('lol_riot_region', regionVal);
+            // kiting.html과 동일한 스토리지 키 사용
+            if(idVal) localStorage.setItem('lol_name', idVal);
+            localStorage.setItem('lol_server', regionVal);
 
             startScreen.style.display = 'none';
             gameOverScreen.style.display = 'none';
@@ -505,7 +520,7 @@
             const region = regionSelect.value;
             const id = riotIdInput.value || "익명";
             const tier = tierBadgeEl.innerText;
-            const text = `[롤 피지컬 트레이너]\n당신의 진짜 티어는?\n티어: ${tier}\n점수: ${score}점\n플레이어: [${region}] ${id}\n\n도전하기: https://lolphysical.xyz`;
+            const text = `[롤 피지컬 트레이너 - 기본 트래킹]\n당신의 진짜 티어는?\n티어: ${tier}\n점수: ${score}점\n플레이어: [${region}] ${id}\n\n도전하기: https://lolphysical.xyz`;
             
             navigator.clipboard.writeText(text).then(() => {
                 alert("결과가 복사되었습니다! 카톡/디스코드/커뮤니티에 팩트 폭격을 날려보세요.");
@@ -526,5 +541,4 @@
         }
     </script>
 </body>
-
 </html>
