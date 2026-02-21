@@ -118,20 +118,21 @@
         </div>
 
         <article class="content-section">
-            <h2>팩트 폭격: 당신의 진짜 협응력 티어는?</h2>
-            <p>머리로는 이미 스킬을 눌렀는데 손가락이 꼬여서 방생하시나요?<br>
-            눈으로 보고, 마우스로 쫓고, 정확한 키를 누르는 <strong>'신경 협응력'</strong>을 숫자로 증명합니다. 랭크 게임 전 굳은 손을 풀기에 가장 완벽한 훈련입니다.</p>
+            <h2 style="color: #ff5555;">🚨 팩트 체크: 여기서 마스터인데, 내 솔랭 티어는 왜 실버인가요?</h2>
+            <p>솔직히 말씀드립니다. 본 훈련소의 티어 판정은 수만 명의 유저 표본을 바탕으로 한 통계적 상위 % 결과가 아닙니다. 오직 당신의 <strong>'순수한 피지컬(반응속도, 클릭 정확도, 동체시력)'</strong>이 어느 정도 경지에 올랐는지를 보여주는 <strong>가상의 절대평가 지표</strong>입니다.</p>
+            <p>만약 이 테스트에서 다이아~마스터급 결과가 나왔음에도 불구하고 실제 리그 오브 레전드 솔랭 티어가 실버/골드에 머물고 있다면... <strong style="color:#ff3366;">당신의 손가락은 아무 죄가 없습니다.</strong></p>
+            <p>미니맵을 전혀 보지 않거나, 챔피언 상성을 무시하고 싸우거나, 운영(매크로) 능력이 심각하게 부족한 것은 아닌지 본인의 <strong>'롤 뇌지컬'</strong>을 진지하게 의심해 보셔야 합니다. (물론 압도적인 팀운 차이일 수도 있습니다!)</p>
             
-            <h3>티어별 팩트 체크 (목표 점수)</h3>
+            <h3>티어별 팩트 체크 (목표 점수 기준)</h3>
             <ul>
-                <li><span style="color:#00ffcc">CHALLENGER (2500+)</span>: 뇌와 손이 완벽히 일치하는 페이커급 협응력.</li>
-                <li><span style="color:#f35588">GRANDMASTER (2000~2490)</span>: 어디 가서 핑 탓, 손가락 탓 안 하는 피지컬.</li>
-                <li><span style="color:#d192fd">MASTER (1500~1990)</span>: 찰나의 순간에 콤보를 우겨넣는 확실한 고수.</li>
-                <li><span style="color:#576bce">DIAMOND (1200~1490)</span>: 훌륭한 반응속도. 뇌지컬만 탑재하면 마스터 가능.</li>
-                <li><span style="color:#00d26a">EMERALD (1000~1190)</span>: 손은 빠른데 스펠과 스킬 키를 가끔 헷갈리는 구간.</li>
-                <li><span style="color:#2ec4b6">PLATINUM (800~990)</span>: 1인분은 확실히 하는 안정적인 트래킹.</li>
-                <li><span style="color:#ffd700">GOLD (600~790)</span>: 흔히 볼 수 있는 평범한 에임.</li>
-                <li><span style="color:#c0c0c0">SILVER (400~590)</span>: 점멸(D/F) 쓰려다 궁극기(R) 날리는 구간.</li>
+                <li><span style="color:#00ffcc">CHALLENGER (4000+)</span>: 뇌와 손이 완벽히 일치하는 페이커급 협응력.</li>
+                <li><span style="color:#f35588">GRANDMASTER (3200~3990)</span>: 어디 가서 핑 탓, 손가락 탓 안 하는 피지컬.</li>
+                <li><span style="color:#d192fd">MASTER (2500~3190)</span>: 찰나의 순간에 콤보를 우겨넣는 확실한 고수.</li>
+                <li><span style="color:#576bce">DIAMOND (1800~2490)</span>: 훌륭한 반응속도. 뇌지컬만 탑재하면 마스터 가능.</li>
+                <li><span style="color:#00d26a">EMERALD (1400~1790)</span>: 손은 빠른데 스펠과 스킬 키를 가끔 헷갈리는 구간.</li>
+                <li><span style="color:#2ec4b6">PLATINUM (1000~1390)</span>: 1인분은 확실히 하는 안정적인 트래킹.</li>
+                <li><span style="color:#ffd700">GOLD (700~990)</span>: 흔히 볼 수 있는 평범한 에임.</li>
+                <li><span style="color:#c0c0c0">SILVER (400~690)</span>: 점멸(D/F) 쓰려다 궁극기(R) 날리는 구간.</li>
                 <li><span style="color:#cd7f32">BRONZE (200~390)</span>: 화면 놓치고 자기 캐릭터 어딨는지 찾는 중.</li>
                 <li><span style="color:#5a5a5a">IRON (0~190)</span>: 키보드에 손 올리는 법부터 다시 배워야 함.</li>
             </ul>
@@ -228,18 +229,15 @@
         canvas.addEventListener('mousedown', (e) => {
             if (!isPlaying) return;
             updateMousePos(e); 
-            
             let pressedBtn = '';
             if (e.button === 0) pressedBtn = '좌클릭';
             else if (e.button === 2) pressedBtn = '우클릭';
-            
             if (pressedBtn) checkHit(pressedBtn);
         });
 
         function startGame() {
             const idVal = riotIdInput.value.trim();
             const regionVal = regionSelect.value;
-            
             if(idVal) localStorage.setItem('lol_name', idVal);
             localStorage.setItem('lol_server', regionVal);
 
@@ -266,12 +264,7 @@
             target.key = keyPool[randomIndex];
             target.creationTime = Date.now();
             
-            // ★ 난이도 밸런스 완화 패치 ★
-            // 시작 시간을 2초에서 1.5초로 줄여 초반 텐션을 올리고, 
-            // 점수에 따른 감소폭을 대폭 줄여 유저가 한계 속도에서 오래 연습할 수 있게 함
             target.lifeTime = Math.max(450, 1500 - (score * 0.4));
-            
-            // 속도 역시 시작 속도를 1.8로 소폭 올리고 상승 가속도를 줄임
             const currentSpeed = Math.min(4.5, 1.8 + (score * 0.0008));
             
             const angle = Math.random() * Math.PI * 2; 
@@ -286,17 +279,18 @@
             updateUI();
         }
 
+        // 트래킹 티어 기준 대폭 상향
         function updateTier() {
             let tier = "UNRANKED";
             let color = "#888";
 
-            if (score >= 2500) { tier = "CHALLENGER"; color = "#00ffcc"; } 
-            else if (score >= 2000) { tier = "GRANDMASTER"; color = "#f35588"; } 
-            else if (score >= 1500) { tier = "MASTER"; color = "#d192fd"; } 
-            else if (score >= 1200) { tier = "DIAMOND"; color = "#576bce"; } 
-            else if (score >= 1000) { tier = "EMERALD"; color = "#00d26a"; } 
-            else if (score >= 800) { tier = "PLATINUM"; color = "#2ec4b6"; } 
-            else if (score >= 600) { tier = "GOLD"; color = "#ffd700"; } 
+            if (score >= 4000) { tier = "CHALLENGER"; color = "#00ffcc"; } 
+            else if (score >= 3200) { tier = "GRANDMASTER"; color = "#f35588"; } 
+            else if (score >= 2500) { tier = "MASTER"; color = "#d192fd"; } 
+            else if (score >= 1800) { tier = "DIAMOND"; color = "#576bce"; } 
+            else if (score >= 1400) { tier = "EMERALD"; color = "#00d26a"; } 
+            else if (score >= 1000) { tier = "PLATINUM"; color = "#2ec4b6"; } 
+            else if (score >= 700) { tier = "GOLD"; color = "#ffd700"; } 
             else if (score >= 400) { tier = "SILVER"; color = "#c0c0c0"; } 
             else if (score >= 200) { tier = "BRONZE"; color = "#cd7f32"; } 
             else if (score >= 0) { tier = "IRON"; color = "#5a5a5a"; } 

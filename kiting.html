@@ -140,22 +140,23 @@
         </div>
 
         <article class="content-section">
-            <h2>팩트 폭격: 당신의 진짜 티어는?</h2>
-            <p>상대 챔피언은 가만히 서서 맞아주지 않습니다. 머리로는 이미 챌린저인데 스킬을 피하지 못해 회색 화면을 보고 계신가요?<br>
-            이 트레이너는 핑계 댈 수 없는 숫자로 당신의 진짜 카이팅 현주소를 보여줍니다.</p>
+            <h2 style="color: #ff5555;">🚨 팩트 체크: 여기서 마스터인데, 내 솔랭 티어는 왜 실버인가요?</h2>
+            <p>솔직히 말씀드립니다. 본 훈련소의 티어 판정은 수만 명의 유저 표본을 바탕으로 한 통계적 상위 % 결과가 아닙니다. 오직 당신의 <strong>'순수한 피지컬(반응속도, 클릭 정확도, 동체시력)'</strong>이 어느 정도 경지에 올랐는지를 보여주는 <strong>가상의 절대평가 지표</strong>입니다.</p>
+            <p>만약 이 테스트에서 다이아~마스터급 결과가 나왔음에도 불구하고 실제 리그 오브 레전드 솔랭 티어가 실버/골드에 머물고 있다면... <strong style="color:#ff3366;">당신의 손가락은 아무 죄가 없습니다.</strong></p>
+            <p>미니맵을 전혀 보지 않거나, 챔피언 상성을 무시하고 싸우거나, 운영(매크로) 능력이 심각하게 부족한 것은 아닌지 본인의 <strong>'롤 뇌지컬'</strong>을 진지하게 의심해 보셔야 합니다. (물론 압도적인 팀운 차이일 수도 있습니다!)</p>
             
             <h3>티어별 팩트 체크 (목표 누적 딜량)</h3>
             <ul>
-                <li><span style="color:#00ffcc">CHALLENGER (12000+)</span>: 괴물. 완벽한 거리 조절과 무호흡 딜링.</li>
-                <li><span style="color:#f35588">GRANDMASTER (9000~11990)</span>: 웬만한 스킬은 춤추듯 피하는 최상위 피지컬.</li>
-                <li><span style="color:#d192fd">MASTER (7000~8990)</span>: 매드무비 제조기. 확실한 딜각과 반응속도.</li>
-                <li><span style="color:#576bce">DIAMOND (5000~6990)</span>: 훌륭한 피지컬. 안정적인 무빙.</li>
-                <li><span style="color:#00d26a">EMERALD (3500~4990)</span>: 손은 빠른데 스킬 피하다가 딜을 못 넣는 구간.</li>
-                <li><span style="color:#2ec4b6">PLATINUM (2500~3490)</span>: 1인분은 확실히 하는 안정적인 카이팅.</li>
-                <li><span style="color:#ffd700">GOLD (1500~2490)</span>: 흔히 볼 수 있는 평범한 무빙.</li>
-                <li><span style="color:#c0c0c0">SILVER (800~1490)</span>: 카이팅 하다가 멈춰서 스킬 다 맞는 구간.</li>
-                <li><span style="color:#cd7f32">BRONZE (400~790)</span>: 제자리에서 평타만 치는 말뚝딜 장인.</li>
-                <li><span style="color:#5a5a5a">IRON (0~390)</span>: 적에게 다가가서 몸을 대주는 자비로운 영혼.</li>
+                <li><span style="color:#00ffcc">CHALLENGER (25000+)</span>: 괴물. 완벽한 거리 조절과 무호흡 딜링.</li>
+                <li><span style="color:#f35588">GRANDMASTER (18000~24990)</span>: 웬만한 스킬은 춤추듯 피하는 최상위 피지컬.</li>
+                <li><span style="color:#d192fd">MASTER (13000~17990)</span>: 매드무비 제조기. 확실한 딜각과 반응속도.</li>
+                <li><span style="color:#576bce">DIAMOND (9000~12990)</span>: 훌륭한 피지컬. 안정적인 무빙.</li>
+                <li><span style="color:#00d26a">EMERALD (6000~8990)</span>: 손은 빠른데 스킬 피하다가 딜을 못 넣는 구간.</li>
+                <li><span style="color:#2ec4b6">PLATINUM (4000~5990)</span>: 1인분은 확실히 하는 안정적인 카이팅.</li>
+                <li><span style="color:#ffd700">GOLD (2500~3990)</span>: 흔히 볼 수 있는 평범한 무빙.</li>
+                <li><span style="color:#c0c0c0">SILVER (1200~2490)</span>: 카이팅 하다가 멈춰서 스킬 다 맞는 구간.</li>
+                <li><span style="color:#cd7f32">BRONZE (500~1190)</span>: 제자리에서 평타만 치는 말뚝딜 장인.</li>
+                <li><span style="color:#5a5a5a">IRON (0~490)</span>: 적에게 다가가서 몸을 대주는 자비로운 영혼.</li>
             </ul>
             
             <h3>조작법 및 실전 훈련 가이드</h3>
@@ -268,7 +269,6 @@
                 aKeyPrimed = false; 
                 let isAttack = false;
                 
-                // ★ 피격 판정 범위(히트박스) 대폭 상향 (40px -> 80px) ★
                 for(let i=0; i<enemies.length; i++) {
                     if(Math.hypot(mouse.x - enemies[i].x, mouse.y - enemies[i].y) <= enemies[i].radius + 80) {
                         isAttack = true; break;
@@ -285,17 +285,18 @@
             }
         });
 
+        // 카이팅 티어 기준 대폭 상향
         function updateTier() {
             let tier = "UNRANKED"; let color = "#888";
-            if (totalDamage >= 12000) { tier = "CHALLENGER"; color = "#00ffcc"; } 
-            else if (totalDamage >= 9000) { tier = "GRANDMASTER"; color = "#f35588"; } 
-            else if (totalDamage >= 7000) { tier = "MASTER"; color = "#d192fd"; } 
-            else if (totalDamage >= 5000) { tier = "DIAMOND"; color = "#576bce"; } 
-            else if (totalDamage >= 3500) { tier = "EMERALD"; color = "#00d26a"; } 
-            else if (totalDamage >= 2500) { tier = "PLATINUM"; color = "#2ec4b6"; } 
-            else if (totalDamage >= 1500) { tier = "GOLD"; color = "#ffd700"; } 
-            else if (totalDamage >= 800) { tier = "SILVER"; color = "#c0c0c0"; } 
-            else if (totalDamage >= 400) { tier = "BRONZE"; color = "#cd7f32"; } 
+            if (totalDamage >= 25000) { tier = "CHALLENGER"; color = "#00ffcc"; } 
+            else if (totalDamage >= 18000) { tier = "GRANDMASTER"; color = "#f35588"; } 
+            else if (totalDamage >= 13000) { tier = "MASTER"; color = "#d192fd"; } 
+            else if (totalDamage >= 9000) { tier = "DIAMOND"; color = "#576bce"; } 
+            else if (totalDamage >= 6000) { tier = "EMERALD"; color = "#00d26a"; } 
+            else if (totalDamage >= 4000) { tier = "PLATINUM"; color = "#2ec4b6"; } 
+            else if (totalDamage >= 2500) { tier = "GOLD"; color = "#ffd700"; } 
+            else if (totalDamage >= 1200) { tier = "SILVER"; color = "#c0c0c0"; } 
+            else if (totalDamage >= 500) { tier = "BRONZE"; color = "#cd7f32"; } 
             else if (totalDamage >= 0) { tier = "IRON"; color = "#5a5a5a"; } 
 
             tierBadgeEl.innerText = tier; tierBadgeEl.style.color = color; tierBadgeEl.style.borderColor = color;
@@ -325,7 +326,6 @@
                         minDist = distToMouse; targetEnemy = enemies[i];
                     }
                 } else {
-                    // ★ 피격 판정 범위(히트박스) 대폭 상향 (40px -> 80px) ★
                     if (distToMouse <= enemies[i].radius + 80 && distToMouse < minDist) {
                         minDist = distToMouse; targetEnemy = enemies[i];
                     }
