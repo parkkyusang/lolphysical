@@ -20,58 +20,20 @@
         .nav-btn:hover { background: #333; border-color: #00ffcc; color: #00ffcc; }
         .nav-btn.active { background: #00ffcc; color: #000; border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.5); }
 
-        .game-area {
-            position: relative;
-            margin-bottom: 40px;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
-            border-radius: 4px;
-            overflow: hidden;
-            background-color: #0e0e10;
-        }
+        /* 점수판 텍스트 UI (캔버스 위로 분리) */
+        .status-board { text-align: center; margin-bottom: 15px; z-index: 10; }
+        .score-board { font-size: 24px; font-weight: 800; color: #fff; text-shadow: 2px 2px 0px #000; margin-bottom: 10px; }
+        .best-score { font-size: 16px; color: #ffd700; font-weight: bold; text-shadow: 1px 1px 2px #000; margin-bottom: 5px; }
+        .tier-badge { display: inline-block; padding: 5px 15px; border-radius: 15px; background-color: #333; color: #fff; font-weight: bold; font-size: 16px; border: 1px solid #555; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+
+        .game-area { position: relative; margin-bottom: 40px; box-shadow: 0 0 40px rgba(0, 0, 0, 0.6); border-radius: 4px; overflow: hidden; background-color: #0e0e10; }
         canvas { border: 1px solid #333; cursor: crosshair; display: block; }
 
-        #ui-layer {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            width: 100%;
-            z-index: 10;
-        }
-        .score-board { 
-            font-size: 24px; font-weight: 800; color: #fff; 
-            text-shadow: 2px 2px 0px #000;
-            margin-bottom: 10px;
-        }
-        .best-score {
-            font-size: 16px; color: #ffd700; font-weight: bold;
-            text-shadow: 1px 1px 2px #000;
-            margin-bottom: 5px;
-        }
-        .tier-badge {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 15px;
-            background-color: #333;
-            color: #fff;
-            font-weight: bold;
-            font-size: 16px;
-            border: 1px solid #555;
-            margin-top: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        }
-        
-        /* 메시지 박스 스타일 */
+        /* 팝업창 중앙 정렬 수정 (게임 방해 X) */
         .message-box {
-            background-color: rgba(0, 0, 0, 0.9);
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid #444;
-            display: inline-block;
-            margin-top: 60px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
-            min-width: 300px;
+            background-color: rgba(0, 0, 0, 0.92); padding: 40px; border-radius: 15px; border: 1px solid #444;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            box-shadow: 0 0 30px rgba(0,0,0,0.8); min-width: 350px; text-align: center; z-index: 20;
         }
         
         .input-group { margin: 15px 0; display: flex; gap: 10px; justify-content: center; }
@@ -79,10 +41,7 @@
         input[type="text"] { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 16px; width: 180px; text-align: center; }
         select:focus, input[type="text"]:focus { outline: none; border-color: #00ffcc; }
         
-        .btn {
-            background: #00ffcc; color: #000; border: none; padding: 12px 24px; border-radius: 5px;
-            font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 15px; transition: 0.2s;
-        }
+        .btn { background: #00ffcc; color: #000; border: none; padding: 12px 24px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 15px; transition: 0.2s; }
         .btn:hover { background: #00dbaf; transform: scale(1.05); }
         .btn-outline { background: transparent; border: 1px solid #00ffcc; color: #00ffcc; }
         .btn-outline:hover { background: rgba(0, 255, 204, 0.1); }
@@ -94,49 +53,21 @@
         .highlight { color: #00ffcc; font-weight: bold; }
         
         /* 뇌과학 아카이브 게시판 스타일 */
-        .science-board {
-            margin-top: 40px;
-            background-color: #111;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 20px;
-        }
+        .science-board { margin-top: 40px; background-color: #111; border: 1px solid #333; border-radius: 8px; padding: 20px; }
         .science-board h3 { margin-top: 0; color: #00ffcc; border-bottom: none; padding-bottom: 0; font-size: 1.3rem; }
         .article-list { list-style: none; padding: 0; margin: 0; }
-        .article-list li {
-            border-bottom: 1px solid #222;
-            padding: 12px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .article-list li { border-bottom: 1px solid #222; padding: 12px 0; display: flex; justify-content: space-between; align-items: center; }
         .article-list li:last-child { border-bottom: none; }
-        .article-list a {
-            color: #e0e0e0;
-            text-decoration: none;
-            font-size: 15px;
-            transition: color 0.2s;
-            display: block;
-            flex-grow: 1;
-        }
+        .article-list a { color: #e0e0e0; text-decoration: none; font-size: 15px; transition: color 0.2s; display: block; flex-grow: 1; }
         .article-list a:hover { color: #00ffcc; text-decoration: underline; }
         .badge-ready { background: #333; color: #888; font-size: 12px; padding: 3px 8px; border-radius: 12px; white-space: nowrap; margin-left: 10px;}
 
         /* 방명록 영역 */
-        .comment-section {
-            margin-top: 50px;
-            width: 100%;
-            max-width: 800px;
-            padding: 20px;
-            background: #1a1a1d;
-            border-radius: 10px;
-        }
-
+        .comment-section { margin-top: 50px; width: 100%; max-width: 800px; padding: 20px; background: #1a1a1d; border-radius: 10px; }
         footer { margin-top: 60px; padding: 30px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #222; width: 100%; }
         .beta-tag { color: #ff5555; font-weight: bold; font-size: 12px; border: 1px solid #ff5555; padding: 2px 6px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
     </style>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9819985404574274" crossorigin="anonymous"></script>
-    
 </head>
 <body>
 
@@ -150,46 +81,47 @@
                 <a href="tracking.html" class="nav-btn active">기본 트래킹 훈련</a>
                 <a href="kiting.html" class="nav-btn">실전 카이팅 훈련</a>
             </div>
-            </header>
+        </header>
+
+        <div class="status-board">
+            <div class="best-score">내 최고 기록: <span id="bestScoreVal">0</span></div>
+            <div class="score-board">점수: <span id="scoreVal">0</span> | 목숨: <span id="lifeVal">5</span></div>
+            <div class="tier-badge" id="tierBadge">UNRANKED</div>
+        </div>
 
         <div class="game-area">
-            <div id="ui-layer">
-                <div class="best-score">내 최고 기록: <span id="bestScoreVal">0</span></div>
-                <div class="score-board">점수: <span id="scoreVal">0</span> | 목숨: <span id="lifeVal">5</span></div>
-                <div class="tier-badge" id="tierBadge">UNRANKED</div>
-                
-                <div id="startScreen" class="message-box">
-                    <h2 style="margin:0 0 15px 0; color:#fff;">소환사님 환영합니다</h2>
-                    <div class="input-group">
-                        <select id="regionSelect">
-                            <option value="KR">KR</option>
-                            <option value="NA">NA</option>
-                            <option value="EUW">EUW</option>
-                            <option value="JP">JP</option>
-                            <option value="ETC">ETC</option>
-                        </select>
-                        <input type="text" id="riotIdInput" placeholder="소환사명 (최대 8자)" maxlength="8">
-                    </div>
-                    <button class="btn" onclick="startGame()">훈련 시작 (스페이스바)</button>
-                    <p style="font-size:13px; color:#888; margin-top:15px;">*입력한 ID는 결과 화면에 표시됩니다.</p>
+            <div id="startScreen" class="message-box">
+                <h2 style="margin:0 0 15px 0; color:#fff;">소환사님 환영합니다</h2>
+                <div class="input-group">
+                    <select id="regionSelect">
+                        <option value="KR">KR</option>
+                        <option value="NA">NA</option>
+                        <option value="EUW">EUW</option>
+                        <option value="JP">JP</option>
+                        <option value="ETC">ETC</option>
+                    </select>
+                    <input type="text" id="riotIdInput" placeholder="소환사명 (최대 8자)" maxlength="8">
                 </div>
+                <button class="btn" onclick="startGame()">훈련 시작 (스페이스바)</button>
+                <p style="font-size:13px; color:#888; margin-top:15px;">*입력한 ID는 결과 화면에 표시됩니다.</p>
+            </div>
 
-                <div id="gameOverScreen" class="message-box" style="display:none;">
-                    <h2 style="margin:0 0 10px 0; color:#ff5555;">GAME OVER</h2>
-                    <p style="font-size:18px; color:#fff;">
-                        <span id="resultId" style="color:#00ffcc; font-weight:bold;"></span> 님의 결과<br>
-                        최종 점수: <span id="resultScore" style="font-size:28px; font-weight:bold;">0</span>점
-                    </p>
-                    <div id="resultTier" style="margin-bottom:20px; font-size:24px; font-weight:bold;"></div>
-                    
-                    <button class="btn" onclick="copyResult()">📋 결과 복사해서 팩트 폭격하기</button>
-                    <button class="btn btn-outline" onclick="restartGame()">다시 도전 (스페이스바)</button>
-                    
-                    <div style="margin-top:20px; font-size:14px; color:#aaa;">
-                        ▼ 아래 방명록에 점수를 남겨 듀오를 구해보세요! ▼
-                    </div>
+            <div id="gameOverScreen" class="message-box" style="display:none;">
+                <h2 style="margin:0 0 10px 0; color:#ff5555;">GAME OVER</h2>
+                <p style="font-size:18px; color:#fff;">
+                    <span id="resultId" style="color:#00ffcc; font-weight:bold;"></span> 님의 결과<br>
+                    최종 점수: <span id="resultScore" style="font-size:28px; font-weight:bold;">0</span>점
+                </p>
+                <div id="resultTier" style="margin-bottom:20px; font-size:24px; font-weight:bold;"></div>
+                
+                <button class="btn" onclick="copyResult()">📋 결과 복사해서 팩트 폭격하기</button>
+                <button class="btn btn-outline" onclick="restartGame()">다시 도전 (스페이스바)</button>
+                
+                <div style="margin-top:20px; font-size:14px; color:#aaa;">
+                    ▼ 아래 방명록에 점수를 남겨 듀오를 구해보세요! ▼
                 </div>
             </div>
+
             <canvas id="gameCanvas" width="800" height="600"></canvas>
         </div>
 
@@ -197,13 +129,7 @@
             <h3 style="text-align:center; color:#ccc;">명예의 전당 & 방명록</h3>
             <p style="text-align:center; font-size:14px; color:#666; margin-bottom:20px;">자신의 진짜 피지컬을 박제하고 친구 추가를 해보세요.</p>
             <div id="utterances-container">
-                <script src="https://utteranc.es/client.js"
-                        repo="parkkyusang/lolphysical"
-                        issue-term="pathname"
-                        theme="github-dark"
-                        crossorigin="anonymous"
-                        async>
-                </script>
+                <script src="https://utteranc.es/client.js" repo="parkkyusang/lolphysical" issue-term="pathname" theme="github-dark" crossorigin="anonymous" async></script>
             </div>
         </div>
 
@@ -232,10 +158,8 @@
             <div class="science-board">
                 <h3>뇌과학과 피지컬 트레이닝 (Scientific Backing)</h3>
                 <p style="font-size:14px; color:#aaa; margin-bottom:15px;">이 훈련이 어떻게 뇌신경 가소성(Neuroplasticity)을 자극하고 실력을 향상시키는지 과학적 근거를 연재합니다.</p>
-                
                 <ul class="article-list" id="articleList"></ul>
             </div>
-
         </article>
 
         <footer>
@@ -282,7 +206,7 @@
         ];
         
         let mouse = { x: 0, y: 0 };
-        const safeTopMargin = 150; 
+        const safeTopMargin = 0; // 이제 점수판이 위에 없으므로 0으로 설정해도 됩니다.
 
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
@@ -350,7 +274,7 @@
 
         function spawnTarget() {
             target.x = 60 + Math.random() * (canvas.width - 120);
-            target.y = safeTopMargin + Math.random() * (canvas.height - safeTopMargin - 60);
+            target.y = 60 + Math.random() * (canvas.height - 120);
             
             const randomIndex = Math.floor(Math.random() * keyPool.length);
             target.key = keyPool[randomIndex];
@@ -392,36 +316,12 @@
         }
 
         function drawMouseIcon(ctx, x, y, radius, type) {
-            const w = 26; 
-            const h = 42; 
-            const mx = x - w/2;
-            const my = y - h/2;
-            const r = 10; 
+            const w = 26; const h = 42; const mx = x - w/2; const my = y - h/2; const r = 10; 
 
-            ctx.beginPath();
-            ctx.roundRect(mx, my, w, h, r);
-            ctx.fillStyle = '#222';
-            ctx.fill();
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = '#fff';
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.roundRect(mx, my, w/2, h*0.4, [r, 0, 0, 0]);
-            ctx.fillStyle = type === '좌클릭' ? '#ff3333' : '#222'; 
-            ctx.fill();
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.roundRect(mx + w/2, my, w/2, h*0.4, [0, r, 0, 0]);
-            ctx.fillStyle = type === '우클릭' ? '#ff3333' : '#222'; 
-            ctx.fill();
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.roundRect(x - 2, my + h*0.08, 4, h*0.2, 2);
-            ctx.fillStyle = '#fff';
-            ctx.fill();
+            ctx.beginPath(); ctx.roundRect(mx, my, w, h, r); ctx.fillStyle = '#222'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
+            ctx.beginPath(); ctx.roundRect(mx, my, w/2, h*0.4, [r, 0, 0, 0]); ctx.fillStyle = type === '좌클릭' ? '#ff3333' : '#222'; ctx.fill(); ctx.stroke();
+            ctx.beginPath(); ctx.roundRect(mx + w/2, my, w/2, h*0.4, [0, r, 0, 0]); ctx.fillStyle = type === '우클릭' ? '#ff3333' : '#222'; ctx.fill(); ctx.stroke();
+            ctx.beginPath(); ctx.roundRect(x - 2, my + h*0.08, 4, h*0.2, 2); ctx.fillStyle = '#fff'; ctx.fill();
         }
 
         function loop() {
@@ -432,108 +332,69 @@
             if (now - target.creationTime > target.lifeTime) {
                 lives--;
                 updateUI();
-                if (lives <= 0) {
-                    gameOver();
-                    return;
-                }
+                if (lives <= 0) { gameOver(); return; }
                 spawnTarget(); 
             }
 
-            target.x += target.vx;
-            target.y += target.vy;
+            target.x += target.vx; target.y += target.vy;
 
             if (target.x - target.radius <= 0 || target.x + target.radius >= canvas.width) {
-                target.vx *= -1; 
-                target.x = Math.max(target.radius, Math.min(target.x, canvas.width - target.radius));
+                target.vx *= -1; target.x = Math.max(target.radius, Math.min(target.x, canvas.width - target.radius));
             }
-            if (target.y - target.radius <= safeTopMargin || target.y + target.radius >= canvas.height) {
-                target.vy *= -1; 
-                target.y = Math.max(safeTopMargin + target.radius, Math.min(target.y, canvas.height - target.radius));
+            if (target.y - target.radius <= 0 || target.y + target.radius >= canvas.height) {
+                target.vy *= -1; target.y = Math.max(target.radius, Math.min(target.y, canvas.height - target.radius));
             }
 
             ctx.beginPath();
             ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
             
             if (['D', 'F', '1', '2', '3', '~'].includes(target.key)) {
-                ctx.fillStyle = '#FFD700'; 
-                ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
-                ctx.fillStyle = '#000'; ctx.font = 'bold 36px sans-serif';
-                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                ctx.fillText(target.key, target.x, target.y);
+                ctx.fillStyle = '#FFD700'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
+                ctx.fillStyle = '#000'; ctx.font = 'bold 36px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(target.key, target.x, target.y);
             } 
             else if (['좌클릭', '우클릭'].includes(target.key)) {
-                ctx.fillStyle = '#1a1a1d'; 
-                ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#ff5555'; ctx.stroke();
-                drawMouseIcon(ctx, target.x, target.y, target.radius, target.key);
+                ctx.fillStyle = '#1a1a1d'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#ff5555'; ctx.stroke(); drawMouseIcon(ctx, target.x, target.y, target.radius, target.key);
             } 
             else {
-                ctx.fillStyle = '#00CED1'; 
-                ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
-                ctx.fillStyle = '#000'; ctx.font = 'bold 36px sans-serif';
-                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                ctx.fillText(target.key, target.x, target.y);
+                ctx.fillStyle = '#00CED1'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
+                ctx.fillStyle = '#000'; ctx.font = 'bold 36px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(target.key, target.x, target.y);
             }
             
             const timeLeftRatio = 1 - (now - target.creationTime) / target.lifeTime;
-            ctx.beginPath();
-            ctx.arc(target.x, target.y, target.radius + 6, -Math.PI/2, (-Math.PI/2) + (Math.PI * 2 * timeLeftRatio));
-            ctx.strokeStyle = '#ff4444';
-            ctx.lineWidth = 4;
-            ctx.stroke();
+            ctx.beginPath(); ctx.arc(target.x, target.y, target.radius + 6, -Math.PI/2, (-Math.PI/2) + (Math.PI * 2 * timeLeftRatio));
+            ctx.strokeStyle = '#ff4444'; ctx.lineWidth = 4; ctx.stroke();
 
             requestAnimationFrame(loop);
         }
 
-        function updateUI() {
-            scoreEl.innerText = score;
-            lifeEl.innerText = lives;
-        }
+        function updateUI() { scoreEl.innerText = score; lifeEl.innerText = lives; }
 
         function gameOver() {
             isPlaying = false;
+            if (score > bestScore) { bestScore = score; localStorage.setItem('lol_best_score', bestScore); bestScoreEl.innerText = bestScore; }
             
-            if (score > bestScore) {
-                bestScore = score;
-                localStorage.setItem('lol_best_score', bestScore);
-                bestScoreEl.innerText = bestScore;
-            }
-            
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.85)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            const tierInfo = updateTier();
-            const region = regionSelect.value;
-            const id = riotIdInput.value || "익명";
+            const tierInfo = updateTier(); const region = regionSelect.value; const id = riotIdInput.value || "익명";
             
-            document.getElementById('resultId').innerText = `[${region}] ${id}`;
-            document.getElementById('resultScore').innerText = score;
-            
+            document.getElementById('resultId').innerText = `[${region}] ${id}`; document.getElementById('resultScore').innerText = score;
             const resTier = document.getElementById('resultTier');
-            resTier.innerText = tierInfo.text;
-            resTier.style.color = tierInfo.color;
+            resTier.innerText = tierInfo.text; resTier.style.color = tierInfo.color;
             
             gameOverScreen.style.display = 'inline-block';
         }
 
         function copyResult() {
-            const region = regionSelect.value;
-            const id = riotIdInput.value || "익명";
-            const tier = tierBadgeEl.innerText;
+            const region = regionSelect.value; const id = riotIdInput.value || "익명"; const tier = tierBadgeEl.innerText;
             const text = `[롤 피지컬 트레이너 - 기본 트래킹]\n당신의 진짜 티어는?\n티어: ${tier}\n점수: ${score}점\n플레이어: [${region}] ${id}\n\n도전하기: https://lolphysical.xyz/tracking.html`;
-            
-            navigator.clipboard.writeText(text).then(() => {
-                alert("결과가 복사되었습니다! 카톡/디스코드/커뮤니티에 팩트 폭격을 날려보세요.");
-            });
+            navigator.clipboard.writeText(text).then(() => { alert("결과가 복사되었습니다! 카톡/디스코드/커뮤니티에 팩트 폭격을 날려보세요."); });
         }
         
         const articleListEl = document.getElementById('articleList');
         if (typeof articles !== 'undefined') {
             articles.forEach(article => {
                 const li = document.createElement('li');
-                li.innerHTML = `
-                    <a href="${article.link}" target="_blank">${article.title}</a>
-                    <span class="badge-ready">${article.status}</span>
-                `;
+                li.innerHTML = `<a href="${article.link}" target="_blank">${article.title}</a><span class="badge-ready">${article.status}</span>`;
                 articleListEl.appendChild(li);
             });
         }
