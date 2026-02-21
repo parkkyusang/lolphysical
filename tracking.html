@@ -4,41 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="롤(LoL) 피지컬 트레이닝. 뇌지컬을 핑계 삼지 마세요. 당신의 진짜 반응속도를 측정합니다.">
-    <title>LoL 피지컬 트레이너 (BETA) - LOLPhysical.xyz</title>
+    <title>LoL 피지컬 트레이너 - LOLPhysical.xyz</title>
     <style>
         body { margin: 0; background-color: #121212; color: #e0e0e0; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; user-select: none; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         
-        header { text-align: center; margin-bottom: 20px; width: 100%; position: relative; }
-        h1 { color: #00ffcc; text-shadow: 0 0 15px rgba(0, 255, 204, 0.4); margin: 0; font-size: 2.5rem; word-break: keep-all; }
-        .subtitle { color: #aaa; font-size: 1rem; margin-top: 10px; }
+        /* 위쪽 여백을 확 줄였습니다 */
+        .container { max-width: 1200px; margin: 0 auto; padding: 10px 20px; display: flex; flex-direction: column; align-items: center; }
+        header { text-align: center; margin-bottom: 10px; width: 100%; position: relative; }
+        h1 { color: #00ffcc; text-shadow: 0 0 15px rgba(0, 255, 204, 0.4); margin: 0; font-size: 2.2rem; word-break: keep-all; }
+        .subtitle { color: #aaa; font-size: 0.95rem; margin-top: 5px; }
 
-        .nav-menu { margin-top: 15px; display: flex; gap: 15px; justify-content: center; align-items: center; }
-        .nav-btn { background: #222; color: #fff; border: 1px solid #444; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; transition: 0.2s; }
+        .nav-menu { margin-top: 10px; display: flex; gap: 15px; justify-content: center; align-items: center; }
+        .nav-btn { background: #222; color: #fff; border: 1px solid #444; padding: 6px 18px; border-radius: 20px; text-decoration: none; font-weight: bold; transition: 0.2s; font-size: 15px; }
         .nav-btn:hover { background: #333; border-color: #00ffcc; color: #00ffcc; }
         .nav-btn.active { background: #00ffcc; color: #000; border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.5); }
 
-        .status-board { text-align: center; margin-bottom: 15px; z-index: 10; }
-        .score-board { font-size: 24px; font-weight: 800; color: #fff; text-shadow: 2px 2px 0px #000; margin-bottom: 10px; }
-        .best-score { font-size: 16px; color: #ffd700; font-weight: bold; text-shadow: 1px 1px 2px #000; margin-bottom: 5px; }
-        .tier-badge { display: inline-block; padding: 5px 15px; border-radius: 15px; background-color: #333; color: #fff; font-weight: bold; font-size: 16px; border: 1px solid #555; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .status-board { text-align: center; margin-bottom: 10px; z-index: 10; }
+        .score-board { font-size: 22px; font-weight: 800; color: #fff; text-shadow: 2px 2px 0px #000; margin-bottom: 5px; }
+        .best-score { font-size: 14px; color: #ffd700; font-weight: bold; text-shadow: 1px 1px 2px #000; margin-bottom: 5px; }
+        .tier-badge { display: inline-block; padding: 4px 12px; border-radius: 15px; background-color: #333; color: #fff; font-weight: bold; font-size: 14px; border: 1px solid #555; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
 
-        .game-area { position: relative; margin-bottom: 40px; box-shadow: 0 0 40px rgba(0, 0, 0, 0.6); border-radius: 4px; overflow: hidden; background-color: #0e0e10; }
-        canvas { border: 1px solid #333; cursor: crosshair; display: block; }
+        /* 화면 비율에 맞춰 자동으로 크기가 줄어들도록 설정 */
+        .game-area { 
+            position: relative; margin: 0 auto 40px auto; width: fit-content; 
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6); border-radius: 4px; overflow: hidden; background-color: #0e0e10; 
+        }
+        canvas { 
+            display: block; max-width: 100vw; max-height: 55vh; width: auto; height: auto; 
+            border: 1px solid #333; cursor: crosshair; 
+        }
 
-        /* 팝업창 위치를 42%로 상향 (답답함 해소) */
+        /* 팝업창 살짝 위로 이동 (top: 42%) */
         .message-box {
-            background-color: rgba(0, 0, 0, 0.92); padding: 40px; border-radius: 15px; border: 1px solid #444;
+            background-color: rgba(0, 0, 0, 0.92); padding: 35px; border-radius: 15px; border: 1px solid #444;
             position: absolute; top: 42%; left: 50%; transform: translate(-50%, -50%);
-            box-shadow: 0 0 30px rgba(0,0,0,0.8); min-width: 350px; text-align: center; z-index: 20;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8); min-width: 320px; text-align: center; z-index: 20;
         }
         
         .input-group { margin: 15px 0; display: flex; gap: 10px; justify-content: center; }
-        select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        input[type="text"] { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 16px; width: 180px; text-align: center; }
+        select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        input[type="text"] { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 15px; width: 160px; text-align: center; }
         select:focus, input[type="text"]:focus { outline: none; border-color: #00ffcc; }
         
-        .btn { background: #00ffcc; color: #000; border: none; padding: 12px 24px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 15px; transition: 0.2s; }
+        .btn { background: #00ffcc; color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 15px; margin-top: 10px; transition: 0.2s; }
         .btn:hover { background: #00dbaf; transform: scale(1.05); }
         .btn-outline { background: transparent; border: 1px solid #00ffcc; color: #00ffcc; }
         .btn-outline:hover { background: rgba(0, 255, 204, 0.1); }
@@ -60,19 +68,17 @@
 
         .comment-section { margin-top: 50px; width: 100%; max-width: 800px; padding: 20px; background: #1a1a1d; border-radius: 10px; }
         footer { margin-top: 60px; padding: 30px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #222; width: 100%; }
-        .beta-tag { color: #ff5555; font-weight: bold; font-size: 12px; border: 1px solid #ff5555; padding: 2px 6px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
     </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9819985404574274" crossorigin="anonymous"></script>
 </head>
 <body>
 
     <div class="container">
         <header>
-            <h1>LoL 피지컬 트레이너 <span class="beta-tag">BETA</span></h1>
+            <h1>LoL 피지컬 트레이너</h1>
             <div class="subtitle">실전 무빙 트래킹(Tracking) · 반응속도 · 정확도</div>
             
             <div class="nav-menu">
-                <a href="index.html" class="nav-btn" style="background: transparent; border: none; font-size: 20px; padding: 8px;">🏠 로비</a>
+                <a href="index.html" class="nav-btn" style="background: transparent; border: none; font-size: 18px; padding: 6px;">🏠 로비</a>
                 <a href="tracking.html" class="nav-btn active">기본 트래킹 훈련</a>
                 <a href="kiting.html" class="nav-btn">실전 카이팅 훈련</a>
             </div>
@@ -111,10 +117,6 @@
                 
                 <button class="btn" onclick="copyResult()">📋 결과 복사해서 팩트 폭격하기</button>
                 <button class="btn btn-outline" onclick="restartGame()">다시 도전 (스페이스바)</button>
-                
-                <div style="margin-top:20px; font-size:14px; color:#aaa;">
-                    ▼ 아래 방명록에 점수를 남겨 듀오를 구해보세요! ▼
-                </div>
             </div>
 
             <canvas id="gameCanvas" width="800" height="600"></canvas>
@@ -146,9 +148,6 @@
                 <li><span style="color:#cd7f32">BRONZE (200~390)</span>: 스킬 날아오는 거 보고 플래시 쓰면 이미 죽어있음.</li>
                 <li><span style="color:#5a5a5a">IRON (0~190)</span>: 마우스에 때가 꼈거나 모니터가 꺼져있는지 확인 요망.</li>
             </ul>
-            
-            <h3>조작법 및 실전 훈련 가이드</h3>
-            <p><strong>마우스 아이콘(좌/우클릭)</strong>, <strong>A키(평타)</strong>, <strong>QWER(스킬)</strong>은 자주 등장합니다. 갑자기 튀어나오는 <strong>D/F(스펠)</strong>, <strong>~(챔피언만 조준)</strong>, <strong>숫자키(아이템)</strong>에 당황하지 마세요. 타겟은 실제 챔피언처럼 끊임없이 무빙을 칩니다. 시야를 넓게 두고 마우스를 부드럽게 따라가세요.</p>
             
             <div class="science-board">
                 <h3>뇌과학과 피지컬 트레이닝 (Scientific Backing)</h3>
@@ -203,11 +202,16 @@
         let mouse = { x: 0, y: 0 };
         const safeTopMargin = 0;
 
-        canvas.addEventListener('mousemove', (e) => {
+        // 캔버스가 작아져도 좌표를 완벽하게 인식하는 비율 보정 코드
+        function updateMousePos(e) {
             const rect = canvas.getBoundingClientRect();
-            mouse.x = e.clientX - rect.left;
-            mouse.y = e.clientY - rect.top;
-        });
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            mouse.x = (e.clientX - rect.left) * scaleX;
+            mouse.y = (e.clientY - rect.top) * scaleY;
+        }
+
+        canvas.addEventListener('mousemove', updateMousePos);
 
         function checkHit(inputKey) {
             if (!isPlaying) return;
@@ -238,6 +242,8 @@
 
         canvas.addEventListener('mousedown', (e) => {
             if (!isPlaying) return;
+            updateMousePos(e); // 클릭 시점에 좌표 한 번 더 정확하게 동기화
+            
             let pressedBtn = '';
             if (e.button === 0) pressedBtn = '좌클릭';
             else if (e.button === 2) pressedBtn = '우클릭';

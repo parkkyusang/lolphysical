@@ -6,38 +6,45 @@
     <title>극한의 카이팅 트레이너 - LOLPhysical.xyz</title>
     <style>
         body { margin: 0; background-color: #121212; color: #e0e0e0; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; user-select: none; overflow-x: hidden; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         
-        header { text-align: center; margin-bottom: 20px; width: 100%; position: relative; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 10px 20px; display: flex; flex-direction: column; align-items: center; }
+        header { text-align: center; margin-bottom: 10px; width: 100%; position: relative; }
         h1 { color: #ff3366; text-shadow: 0 0 15px rgba(255, 51, 102, 0.4); margin: 0; font-size: 2.2rem; }
-        .subtitle { color: #aaa; font-size: 1rem; margin-top: 5px; }
+        .subtitle { color: #aaa; font-size: 0.95rem; margin-top: 5px; }
         
-        .nav-menu { margin-top: 15px; display: flex; gap: 15px; justify-content: center; align-items: center; }
-        .nav-btn { background: #222; color: #fff; border: 1px solid #444; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; transition: 0.2s; }
+        .nav-menu { margin-top: 10px; display: flex; gap: 15px; justify-content: center; align-items: center; }
+        .nav-btn { background: #222; color: #fff; border: 1px solid #444; padding: 6px 18px; border-radius: 20px; text-decoration: none; font-weight: bold; transition: 0.2s; font-size: 15px; }
         .nav-btn:hover { background: #333; border-color: #00ffcc; color: #00ffcc; }
         .nav-btn.active { background: #ff3366; color: #fff; border-color: #ff3366; box-shadow: 0 0 10px rgba(255, 51, 102, 0.5); }
 
-        .status-board { text-align: center; margin-bottom: 15px; z-index: 10; }
-        .score-board { font-size: 24px; font-weight: 800; color: #fff; text-shadow: 2px 2px 0px #000; margin-bottom: 10px; }
-        .best-score { font-size: 16px; color: #ffd700; font-weight: bold; text-shadow: 1px 1px 2px #000; margin-bottom: 5px; }
-        .tier-badge { display: inline-block; padding: 5px 15px; border-radius: 15px; background-color: #333; color: #fff; font-weight: bold; font-size: 16px; border: 1px solid #555; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .status-board { text-align: center; margin-bottom: 10px; z-index: 10; }
+        .score-board { font-size: 22px; font-weight: 800; color: #fff; text-shadow: 2px 2px 0px #000; margin-bottom: 5px; }
+        .best-score { font-size: 14px; color: #ffd700; font-weight: bold; text-shadow: 1px 1px 2px #000; margin-bottom: 5px; }
+        .tier-badge { display: inline-block; padding: 4px 12px; border-radius: 15px; background-color: #333; color: #fff; font-weight: bold; font-size: 14px; border: 1px solid #555; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
 
-        .game-area { position: relative; box-shadow: 0 0 40px rgba(0, 0, 0, 0.8); border-radius: 4px; overflow: hidden; background-color: #0a0a0c; border: 2px solid #333; cursor: crosshair; }
-        canvas { display: block; background: radial-gradient(circle at center, #1a1a20 0%, #0a0a0c 100%); }
+        /* 화면 비율에 맞춰 자동으로 크기가 줄어들도록 설정 */
+        .game-area { 
+            position: relative; margin: 0 auto 40px auto; width: fit-content; 
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8); border-radius: 4px; overflow: hidden; background-color: #0a0a0c; border: 2px solid #333; cursor: crosshair; 
+        }
+        canvas { 
+            display: block; max-width: 100vw; max-height: 55vh; width: auto; height: auto; 
+            background: radial-gradient(circle at center, #1a1a20 0%, #0a0a0c 100%); 
+        }
 
-        /* 팝업창 위치를 42%로 상향 (답답함 해소) */
+        /* 팝업창 위치 상향 (답답함 해소) */
         .message-box {
-            background-color: rgba(0, 0, 0, 0.92); padding: 40px; border-radius: 15px; border: 1px solid #444;
+            background-color: rgba(0, 0, 0, 0.92); padding: 35px; border-radius: 15px; border: 1px solid #444;
             position: absolute; top: 42%; left: 50%; transform: translate(-50%, -50%);
-            box-shadow: 0 0 30px rgba(0,0,0,0.8); min-width: 350px; text-align: center; z-index: 20;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8); min-width: 320px; text-align: center; z-index: 20;
         }
 
         .input-group { margin: 15px 0; display: flex; gap: 10px; justify-content: center; width: 100%; }
-        select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        input[type="text"] { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 16px; text-align: center; width: 180px; }
+        select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        input[type="text"] { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 15px; text-align: center; width: 160px; }
         select:focus, input[type="text"]:focus { outline: none; border-color: #ff3366; }
 
-        .btn { background: #00ffcc; color: #000; border: none; padding: 12px 24px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 15px; transition: 0.2s; }
+        .btn { background: #00ffcc; color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 15px; margin-top: 10px; transition: 0.2s; }
         .btn:hover { background: #00dbaf; transform: scale(1.05); }
         .btn-outline { background: transparent; border: 1px solid #00ffcc; color: #00ffcc; }
         .btn-outline:hover { background: rgba(0, 255, 204, 0.1); }
@@ -45,7 +52,7 @@
         .highlight { color: #ff3366; font-weight: bold; }
         .highlight-blue { color: #00ffcc; font-weight: bold; }
 
-        /* 하단 콘텐츠 영역 스타일 (트래킹과 동일) */
+        /* 하단 콘텐츠 영역 스타일 (트래킹과 100% 동일) */
         .content-section { background-color: #1a1a1d; padding: 40px; border-radius: 15px; max-width: 800px; width: 100%; box-sizing: border-box; margin-top: 20px; }
         h2 { color: #f0e6d2; border-bottom: 1px solid #333; padding-bottom: 15px; margin-top: 40px; }
         h3 { color: #ccc; margin-top: 25px; }
@@ -72,7 +79,7 @@
             <div class="subtitle">회피 · 다수 적 카이팅 · 누적 딜량 측정</div>
             
             <div class="nav-menu">
-                <a href="index.html" class="nav-btn" style="background: transparent; border: none; font-size: 20px; padding: 8px;">🏠 로비</a>
+                <a href="index.html" class="nav-btn" style="background: transparent; border: none; font-size: 18px; padding: 6px;">🏠 로비</a>
                 <a href="tracking.html" class="nav-btn">기본 트래킹 훈련</a>
                 <a href="kiting.html" class="nav-btn active">실전 카이팅 훈련</a>
             </div>
@@ -88,7 +95,7 @@
             <div id="startScreen" class="message-box">
                 <h2 style="margin:0 0 15px 0; color:#fff;">소환사님 환영합니다</h2>
                 <p style="font-size:14px; color:#aaa; margin-top:-10px; margin-bottom:15px;">
-                    장판과 투사체를 피해 <span class="highlight">최대한 딜을 우겨넣으세요.</span><br>
+                    장판과 스킬을 피해 <span class="highlight">최대한 딜을 우겨넣으세요.</span><br>
                     (※ S키를 누르면 즉시 멈춥니다)
                 </p>
                 
@@ -195,8 +202,8 @@
         let bestDamage = localStorage.getItem('lol_best_damage_kiting') || 0;
         bestDamageEl.innerText = bestDamage;
 
-        let savedId = localStorage.getItem('lol_riot_id') || "";
-        let savedRegion = localStorage.getItem('lol_riot_region') || "KR";
+        let savedId = localStorage.getItem('lol_name') || "";
+        let savedRegion = localStorage.getItem('lol_server') || "KR";
         let savedMode = localStorage.getItem('lol_kiting_mode') || "A_LEFT";
         
         riotIdInput.value = savedId;
@@ -221,11 +228,16 @@
         let hitFeedback = []; 
         let mouse = { x: 0, y: 0 };
 
-        canvas.addEventListener('mousemove', (e) => {
+        // 캔버스가 작아져도 좌표를 완벽하게 인식하는 비율 보정 코드
+        function updateMousePos(e) {
             const rect = canvas.getBoundingClientRect();
-            mouse.x = e.clientX - rect.left;
-            mouse.y = e.clientY - rect.top;
-        });
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            mouse.x = (e.clientX - rect.left) * scaleX;
+            mouse.y = (e.clientY - rect.top) * scaleY;
+        }
+
+        canvas.addEventListener('mousemove', updateMousePos);
 
         window.addEventListener('keydown', (e) => {
             const isInputFocus = (document.activeElement === riotIdInput || document.activeElement === regionSelect || document.activeElement === modeSelect);
@@ -253,6 +265,8 @@
 
         canvas.addEventListener('mousedown', (e) => {
             if (!isPlaying) return;
+            updateMousePos(e); // 클릭 시점에 좌표 한 번 더 정확하게 동기화
+
             if (e.button === 0 && currentMode === 'A_LEFT' && aKeyPrimed) {
                 attemptAttack(mouse.x, mouse.y, true);
                 aKeyPrimed = false;
@@ -367,8 +381,8 @@
 
         function startGame() {
             const idVal = riotIdInput.value.trim(); const regionVal = regionSelect.value; currentMode = modeSelect.value;
-            if(idVal) localStorage.setItem('lol_riot_id', idVal);
-            localStorage.setItem('lol_riot_region', regionVal); localStorage.setItem('lol_kiting_mode', currentMode);
+            if(idVal) localStorage.setItem('lol_name', idVal);
+            localStorage.setItem('lol_server', regionVal); localStorage.setItem('lol_kiting_mode', currentMode);
 
             startScreen.style.display = 'none'; gameOverScreen.style.display = 'none';
             totalDamage = 0; startTime = Date.now(); survivalTime = 0; lastAttackTime = 0; aKeyPrimed = false;
@@ -481,7 +495,7 @@
             requestAnimationFrame(loop);
         }
 
-        // 게시판 목록 로드 스크립트
+        // 게시판 로드 스크립트
         const articleListEl = document.getElementById('articleList');
         if (typeof articles !== 'undefined') {
             articles.forEach(article => {
