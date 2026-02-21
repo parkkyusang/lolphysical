@@ -6,7 +6,6 @@
     <meta name="description" content="롤(LoL) 피지컬 트레이닝. 뇌지컬을 핑계 삼지 마세요. 당신의 진짜 반응속도를 측정합니다.">
     <title>LoL 피지컬 트레이너 (BETA) - LOLPhysical.xyz</title>
     <style>
-        /* 기본 스타일 */
         body { margin: 0; background-color: #121212; color: #e0e0e0; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; user-select: none; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         
@@ -14,13 +13,11 @@
         h1 { color: #00ffcc; text-shadow: 0 0 15px rgba(0, 255, 204, 0.4); margin: 0; font-size: 2.5rem; word-break: keep-all; }
         .subtitle { color: #aaa; font-size: 1rem; margin-top: 10px; }
 
-        /* 네비게이션 메뉴 */
         .nav-menu { margin-top: 15px; display: flex; gap: 15px; justify-content: center; align-items: center; }
         .nav-btn { background: #222; color: #fff; border: 1px solid #444; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; transition: 0.2s; }
         .nav-btn:hover { background: #333; border-color: #00ffcc; color: #00ffcc; }
         .nav-btn.active { background: #00ffcc; color: #000; border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.5); }
 
-        /* 점수판 텍스트 UI (캔버스 위로 분리) */
         .status-board { text-align: center; margin-bottom: 15px; z-index: 10; }
         .score-board { font-size: 24px; font-weight: 800; color: #fff; text-shadow: 2px 2px 0px #000; margin-bottom: 10px; }
         .best-score { font-size: 16px; color: #ffd700; font-weight: bold; text-shadow: 1px 1px 2px #000; margin-bottom: 5px; }
@@ -29,10 +26,10 @@
         .game-area { position: relative; margin-bottom: 40px; box-shadow: 0 0 40px rgba(0, 0, 0, 0.6); border-radius: 4px; overflow: hidden; background-color: #0e0e10; }
         canvas { border: 1px solid #333; cursor: crosshair; display: block; }
 
-        /* 팝업창 중앙 정렬 수정 (게임 방해 X) */
+        /* 팝업창 위치를 42%로 상향 (답답함 해소) */
         .message-box {
             background-color: rgba(0, 0, 0, 0.92); padding: 40px; border-radius: 15px; border: 1px solid #444;
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            position: absolute; top: 42%; left: 50%; transform: translate(-50%, -50%);
             box-shadow: 0 0 30px rgba(0,0,0,0.8); min-width: 350px; text-align: center; z-index: 20;
         }
         
@@ -52,7 +49,6 @@
         p, ul { color: #b0b0b0; }
         .highlight { color: #00ffcc; font-weight: bold; }
         
-        /* 뇌과학 아카이브 게시판 스타일 */
         .science-board { margin-top: 40px; background-color: #111; border: 1px solid #333; border-radius: 8px; padding: 20px; }
         .science-board h3 { margin-top: 0; color: #00ffcc; border-bottom: none; padding-bottom: 0; font-size: 1.3rem; }
         .article-list { list-style: none; padding: 0; margin: 0; }
@@ -62,7 +58,6 @@
         .article-list a:hover { color: #00ffcc; text-decoration: underline; }
         .badge-ready { background: #333; color: #888; font-size: 12px; padding: 3px 8px; border-radius: 12px; white-space: nowrap; margin-left: 10px;}
 
-        /* 방명록 영역 */
         .comment-section { margin-top: 50px; width: 100%; max-width: 800px; padding: 20px; background: #1a1a1d; border-radius: 10px; }
         footer { margin-top: 60px; padding: 30px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #222; width: 100%; }
         .beta-tag { color: #ff5555; font-weight: bold; font-size: 12px; border: 1px solid #ff5555; padding: 2px 6px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
@@ -206,7 +201,7 @@
         ];
         
         let mouse = { x: 0, y: 0 };
-        const safeTopMargin = 0; // 이제 점수판이 위에 없으므로 0으로 설정해도 됩니다.
+        const safeTopMargin = 0;
 
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();

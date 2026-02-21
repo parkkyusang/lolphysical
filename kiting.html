@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>극한의 카이팅 트레이너 - LOLPhysical.xyz</title>
     <style>
-        body { margin: 0; background-color: #121212; color: #e0e0e0; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; user-select: none; overflow: hidden; }
+        body { margin: 0; background-color: #121212; color: #e0e0e0; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; user-select: none; overflow-x: hidden; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         
         header { text-align: center; margin-bottom: 20px; width: 100%; position: relative; }
@@ -17,7 +17,6 @@
         .nav-btn:hover { background: #333; border-color: #00ffcc; color: #00ffcc; }
         .nav-btn.active { background: #ff3366; color: #fff; border-color: #ff3366; box-shadow: 0 0 10px rgba(255, 51, 102, 0.5); }
 
-        /* 점수판 텍스트 UI (캔버스 위로 분리) */
         .status-board { text-align: center; margin-bottom: 15px; z-index: 10; }
         .score-board { font-size: 24px; font-weight: 800; color: #fff; text-shadow: 2px 2px 0px #000; margin-bottom: 10px; }
         .best-score { font-size: 16px; color: #ffd700; font-weight: bold; text-shadow: 1px 1px 2px #000; margin-bottom: 5px; }
@@ -26,10 +25,10 @@
         .game-area { position: relative; box-shadow: 0 0 40px rgba(0, 0, 0, 0.8); border-radius: 4px; overflow: hidden; background-color: #0a0a0c; border: 2px solid #333; cursor: crosshair; }
         canvas { display: block; background: radial-gradient(circle at center, #1a1a20 0%, #0a0a0c 100%); }
 
-        /* 팝업창 중앙 정렬 수정 (게임 방해 X) */
+        /* 팝업창 위치를 42%로 상향 (답답함 해소) */
         .message-box {
             background-color: rgba(0, 0, 0, 0.92); padding: 40px; border-radius: 15px; border: 1px solid #444;
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            position: absolute; top: 42%; left: 50%; transform: translate(-50%, -50%);
             box-shadow: 0 0 30px rgba(0,0,0,0.8); min-width: 350px; text-align: center; z-index: 20;
         }
 
@@ -45,6 +44,24 @@
         
         .highlight { color: #ff3366; font-weight: bold; }
         .highlight-blue { color: #00ffcc; font-weight: bold; }
+
+        /* 하단 콘텐츠 영역 스타일 (트래킹과 동일) */
+        .content-section { background-color: #1a1a1d; padding: 40px; border-radius: 15px; max-width: 800px; width: 100%; box-sizing: border-box; margin-top: 20px; }
+        h2 { color: #f0e6d2; border-bottom: 1px solid #333; padding-bottom: 15px; margin-top: 40px; }
+        h3 { color: #ccc; margin-top: 25px; }
+        p, ul { color: #b0b0b0; }
+        
+        .science-board { margin-top: 40px; background-color: #111; border: 1px solid #333; border-radius: 8px; padding: 20px; }
+        .science-board h3 { margin-top: 0; color: #00ffcc; border-bottom: none; padding-bottom: 0; font-size: 1.3rem; }
+        .article-list { list-style: none; padding: 0; margin: 0; }
+        .article-list li { border-bottom: 1px solid #222; padding: 12px 0; display: flex; justify-content: space-between; align-items: center; }
+        .article-list li:last-child { border-bottom: none; }
+        .article-list a { color: #e0e0e0; text-decoration: none; font-size: 15px; transition: color 0.2s; display: block; flex-grow: 1; }
+        .article-list a:hover { color: #00ffcc; text-decoration: underline; }
+        .badge-ready { background: #333; color: #888; font-size: 12px; padding: 3px 8px; border-radius: 12px; white-space: nowrap; margin-left: 10px;}
+
+        .comment-section { margin-top: 50px; width: 100%; max-width: 800px; padding: 20px; background: #1a1a1d; border-radius: 10px; }
+        footer { margin-top: 60px; padding: 30px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #222; width: 100%; }
     </style>
 </head>
 <body>
@@ -52,7 +69,7 @@
     <div class="container">
         <header>
             <h1>극한의 카이팅 트레이너</h1>
-            <div class="subtitle">탄막 회피 · 다수 적 카이팅 · 누적 딜량 측정</div>
+            <div class="subtitle">회피 · 다수 적 카이팅 · 누적 딜량 측정</div>
             
             <div class="nav-menu">
                 <a href="index.html" class="nav-btn" style="background: transparent; border: none; font-size: 20px; padding: 8px;">🏠 로비</a>
@@ -112,7 +129,50 @@
 
             <canvas id="gameCanvas" width="900" height="600"></canvas>
         </div>
+
+        <div class="comment-section">
+            <h3 style="text-align:center; color:#ccc;">명예의 전당 & 방명록</h3>
+            <p style="text-align:center; font-size:14px; color:#666; margin-bottom:20px;">자신의 진짜 피지컬을 박제하고 친구 추가를 해보세요.</p>
+            <div id="utterances-container">
+                <script src="https://utteranc.es/client.js" repo="parkkyusang/lolphysical" issue-term="pathname" theme="github-dark" crossorigin="anonymous" async></script>
+            </div>
+        </div>
+
+        <article class="content-section">
+            <h2>팩트 폭격: 당신의 진짜 티어는?</h2>
+            <p>상대 챔피언은 가만히 서서 맞아주지 않습니다. 머리로는 이미 챌린저인데 스킬을 피하지 못해 회색 화면을 보고 계신가요?<br>
+            이 트레이너는 핑계 댈 수 없는 숫자로 당신의 진짜 카이팅 현주소를 보여줍니다.</p>
+            
+            <h3>티어별 팩트 체크 (목표 누적 딜량)</h3>
+            <ul>
+                <li><span style="color:#00ffcc">CHALLENGER (12000+)</span>: 괴물. 완벽한 거리 조절과 무호흡 딜링.</li>
+                <li><span style="color:#f35588">GRANDMASTER (9000~11990)</span>: 웬만한 스킬은 춤추듯 피하는 최상위 피지컬.</li>
+                <li><span style="color:#d192fd">MASTER (7000~8990)</span>: 매드무비 제조기. 확실한 딜각과 반응속도.</li>
+                <li><span style="color:#576bce">DIAMOND (5000~6990)</span>: 훌륭한 피지컬. 안정적인 무빙.</li>
+                <li><span style="color:#00d26a">EMERALD (3500~4990)</span>: 손은 빠른데 스킬 피하다가 딜을 못 넣는 구간.</li>
+                <li><span style="color:#2ec4b6">PLATINUM (2500~3490)</span>: 1인분은 확실히 하는 안정적인 카이팅.</li>
+                <li><span style="color:#ffd700">GOLD (1500~2490)</span>: 흔히 볼 수 있는 평범한 무빙.</li>
+                <li><span style="color:#c0c0c0">SILVER (800~1490)</span>: 카이팅 하다가 멈춰서 스킬 다 맞는 구간.</li>
+                <li><span style="color:#cd7f32">BRONZE (400~790)</span>: 제자리에서 평타만 치는 말뚝딜 장인.</li>
+                <li><span style="color:#5a5a5a">IRON (0~390)</span>: 적에게 다가가서 몸을 대주는 자비로운 영혼.</li>
+            </ul>
+            
+            <h3>조작법 및 실전 훈련 가이드</h3>
+            <p>적들이 당신을 향해 몰려옵니다. <strong>우클릭(이동)</strong>과 <strong>어택땅(공격)</strong>을 섞어 거리(Spacing)를 유지하세요. <strong>보라색 메이지</strong>는 발밑에 즉발형 스킬(장판, 직선 레이저)을 쏘니 <strong>S키(정지)</strong>와 무빙으로 즉시 회피해야 합니다.</p>
+            
+            <div class="science-board">
+                <h3>뇌과학과 피지컬 트레이닝 (Scientific Backing)</h3>
+                <p style="font-size:14px; color:#aaa; margin-bottom:15px;">이 훈련이 어떻게 뇌신경 가소성(Neuroplasticity)을 자극하고 실력을 향상시키는지 과학적 근거를 연재합니다.</p>
+                <ul class="article-list" id="articleList"></ul>
+            </div>
+        </article>
+
+        <footer>
+            <p>© 2026 LoL Physical Trainer. All rights reserved. | <a href="privacy.html" style="color:#888; text-decoration:none;">개인정보처리방침(Privacy Policy)</a></p>
+        </footer>
     </div>
+
+    <script src="articles.js"></script>
 
     <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
@@ -419,6 +479,16 @@
             }
 
             requestAnimationFrame(loop);
+        }
+
+        // 게시판 목록 로드 스크립트
+        const articleListEl = document.getElementById('articleList');
+        if (typeof articles !== 'undefined') {
+            articles.forEach(article => {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="${article.link}" target="_blank">${article.title}</a><span class="badge-ready">${article.status}</span>`;
+                articleListEl.appendChild(li);
+            });
         }
     </script>
 </body>
