@@ -74,6 +74,13 @@
         .article-list a:hover { color: #00ffcc; text-decoration: underline; }
         .badge-ready { background: #222; color: #00ffcc; font-size: 12px; padding: 4px 10px; border-radius: 12px; white-space: nowrap; margin-left: 15px; border: 1px solid #00ffcc; }
 
+        /* 방명록 스타일 추가 */
+        .comment-section {
+            width: 100%; max-width: 900px; padding: 20px; 
+            background: #1a1a1d; border-radius: 12px; 
+            margin-bottom: 40px; border: 1px solid #333; box-sizing: border-box;
+        }
+
         footer { margin-top: 20px; padding: 30px; text-align: center; font-size: 13px; color: #555; border-top: 1px solid #1a1a1d; width: 100%; }
         footer a { color: #888; text-decoration: none; transition: 0.2s; }
         footer a:hover { color: #fff; }
@@ -100,7 +107,6 @@
                 <div class="play-btn">입장하기</div>
             </a>
         </div>
-
 
         <article class="article-section">
             <h2>진짜 '피지컬'이란 무엇인가?</h2>
@@ -131,13 +137,25 @@
             <p>랭크 게임을 돌리기 전, 이 훈련소에서 단 5분만 투자해 보십시오. 마우스가 커서가 내 생각과 일치하여 챔피언에 정확히 꽂히는 <strong>'몰입 상태(Flow State)'</strong>를 경험하시게 될 것입니다.</p>
         </article>
 
-
         <div class="science-board">
             <h3>피지컬 & 뇌과학 아카이브</h3>
             <p style="font-size:14px; color:#888; margin-top:-10px; margin-bottom:20px;">무작정 손가락만 혹사시키지 마세요. 게임 피지컬의 원리를 다룬 전문 칼럼을 읽어보세요.</p>
-            
             <ul class="article-list" id="articleList">
                 </ul>
+        </div>
+
+        <div class="comment-section">
+            <h3 style="text-align:center; color:#ccc;">훈련소 통합 방명록</h3>
+            <p style="text-align:center; font-size:14px; color:#666; margin-bottom:20px;">자유롭게 훈련 후기나 건의사항을 남겨주세요.</p>
+            <div id="utterances-container">
+                <script src="https://utteranc.es/client.js"
+                        repo="parkkyusang/lolphysical"
+                        issue-term="pathname"
+                        theme="github-dark"
+                        crossorigin="anonymous"
+                        async>
+                </script>
+            </div>
         </div>
 
         <footer>
