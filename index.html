@@ -14,8 +14,7 @@
         .subtitle { color: #aaa; font-size: 1.2rem; margin-top: 15px; }
         .highlight { color: #00ffcc; font-weight: bold; }
 
-        /* 상단 게임 선택 카드 레이아웃 */
-        .card-container { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; width: 100%; margin-bottom: 60px; }
+        .card-container { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; width: 100%; margin-bottom: 50px; }
         
         .game-card {
             background-color: #1a1a1d; border: 2px solid #333; border-radius: 15px; padding: 40px 30px;
@@ -40,7 +39,7 @@
         .card-tracking:hover .play-btn { background: #00ffcc; color: #000; }
         .card-kiting:hover .play-btn { background: #ff3366; color: #fff; }
 
-        /* ▼ 본문(장문 텍스트) 스타일 - 애드센스용 고퀄리티 본문 영역 ▼ */
+        /* 본문(장문 텍스트) 스타일 */
         .article-section {
             background-color: #111; border: 1px solid #222; border-radius: 15px;
             padding: 50px; max-width: 900px; width: 100%; box-sizing: border-box;
@@ -52,22 +51,41 @@
         .article-section p { color: #bbb; font-size: 1.05rem; line-height: 1.8; margin-bottom: 20px; text-align: justify; }
         .article-section strong { color: #fff; }
         
-        /* 이미지 플레이스홀더 (나중에 실제 이미지 URL로 교체 가능) */
-        .image-placeholder {
-            width: 100%; height: auto; min-height: 250px;
-            background-color: #1a1a1d; border: 1px dashed #444; border-radius: 8px;
-            display: flex; justify-content: center; align-items: center;
-            color: #666; font-size: 14px; margin: 30px 0;
-            overflow: hidden;
+        /* 이미지 영역 스타일 */
+        .image-wrapper {
+            margin: 40px 0; text-align: center;
         }
-        .image-placeholder img { width: 100%; height: auto; display: block; }
+        .image-wrapper img {
+            width: 100%; max-width: 700px; border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 1px solid #333;
+        }
+        .image-caption {
+            color: #888; font-size: 13.5px; margin-top: 12px; font-style: italic;
+        }
 
         .quote-box {
             border-left: 4px solid #ff3366; background-color: rgba(255, 51, 102, 0.05);
             padding: 20px; border-radius: 0 8px 8px 0; margin: 30px 0; font-style: italic; color: #ddd;
         }
 
-        footer { margin-top: 40px; padding: 30px; text-align: center; font-size: 13px; color: #555; border-top: 1px solid #1a1a1d; width: 100%; }
+        /* 칼럼 게시판 영역 복구 및 스타일 강화 */
+        .science-board { 
+            width: 100%; max-width: 900px; background-color: #161619; 
+            border: 1px solid #333; border-radius: 12px; padding: 40px; box-sizing: border-box; 
+            margin-bottom: 40px;
+        }
+        .science-board h3 { margin: 0 0 15px 0; color: #fff; font-size: 1.6rem; display: flex; align-items: center; gap: 10px; }
+        .science-board h3::before { content: '📚'; font-size: 1.8rem; }
+        
+        .article-list { list-style: none; padding: 0; margin: 0; }
+        .article-list li { border-bottom: 1px solid #2a2a2d; padding: 18px 0; display: flex; justify-content: space-between; align-items: center; }
+        .article-list li:last-child { border-bottom: none; }
+        .article-list a { color: #ccc; text-decoration: none; font-size: 16px; font-weight: 500; transition: color 0.2s; flex-grow: 1; }
+        .article-list a:hover { color: #00ffcc; text-decoration: underline; }
+        .badge-ready { background: #222; color: #00ffcc; font-size: 12px; padding: 4px 10px; border-radius: 12px; white-space: nowrap; margin-left: 15px; border: 1px solid #00ffcc; }
+        .badge-hot { background: #222; color: #ff3366; font-size: 12px; padding: 4px 10px; border-radius: 12px; white-space: nowrap; margin-left: 15px; border: 1px solid #ff3366; }
+
+        footer { margin-top: 20px; padding: 30px; text-align: center; font-size: 13px; color: #555; border-top: 1px solid #1a1a1d; width: 100%; }
         footer a { color: #888; text-decoration: none; transition: 0.2s; }
         footer a:hover { color: #fff; }
     </style>
@@ -102,16 +120,15 @@
 
             <p>e스포츠 과학과 인지심리학적 관점에서 볼 때, 롤에서 요구하는 피지컬은 크게 세 가지 핵심 신경망의 결합으로 이루어집니다. <strong>1) 시각적 정보 처리(동체시력), 2) 정확한 운동 신경(마우스 에임), 그리고 3) 이 둘을 연결하는 뇌·손 협응력(Hand-Eye Coordination)</strong>입니다.</p>
 
-            <div class="image-placeholder">
-                <img src="https://images.unsplash.com/photo-1559757175-5700dde675bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                     alt="시각 정보와 운동 신경의 뇌신경 연결망 시각화" 
-                     style="width: 100%; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); object-fit: cover; max-height: 400px;">
+            <div class="image-wrapper">
+                <img src="cognitive.jpg" alt="한타 상황에서의 인지 병목 현상과 절차 기억을 통한 자동화 경로 도식화">
+                <div class="image-caption">[도식] 복잡한 한타 상황에서의 인지 병목(좌측)과 절차 기억을 통한 척수 반사적 자동화 경로(우측)</div>
             </div>
 
             <h3>뇌신경 가소성(Neuroplasticity): 피지컬은 재능인가, 노력인가?</h3>
-            <p>많은 유저들이 20대 중반만 넘어가도 에이징 커브(Aging Curve)가 왔다며 피지컬 하락을 기정사실화합니다. 하지만 신경학자들의 연구에 따르면 인간의 뇌는 반복적인 자극에 의해 신경 회로를 재구성하는 <strong>'신경 가소성'</strong>을 가지고 있습니다.</p>
+            <p>위 도식에서 볼 수 있듯, 초보자는 한타(Teamfight) 상황에서 여러 자극이 동시에 들어오면 뇌의 인지적 병목(Cognitive Bottleneck)을 겪으며 입력 지연(Input Delay)이 발생합니다. 하지만 신경학자들의 연구에 따르면 인간의 뇌는 반복적인 자극에 의해 신경 회로를 재구성하는 <strong>'신경 가소성'</strong>을 가지고 있습니다.</p>
 
-            <p>프로게이머들이 상대의 점멸이나 논타겟 스킬을 보고 '반사적으로' 반응하는 것은 단순한 동체시력이 아닙니다. 수만 번의 반복 학습을 통해 특정 상황에 대한 신경 전달 경로(미엘린 수초)가 두꺼워져, 생각하는 단계를 거치지 않고 척수 반사 수준으로 손가락이 움직이는 <strong>자동화(Automatization)</strong>의 결과입니다.</p>
+            <p>프로게이머들이 상대의 점멸이나 논타겟 스킬을 보고 '반사적으로' 반응하는 것은 단순한 재능이 아닙니다. 수만 번의 반복 학습을 통해 특정 상황에 대한 신경 전달 경로(미엘린 수초)가 두꺼워져, 대뇌피질을 거치는 느린 과정을 생략하고 기저핵(Basal Ganglia)을 통한 <strong>자동화(Automated Pathway)</strong>가 이루어진 결과입니다.</p>
 
             <div class="quote-box">
                 "진정한 피지컬은 날아오는 스킬을 '보고' 피하는 것이 아니라, 상대의 모션을 뇌가 인식하는 즉시 손가락이 이미 움직여 있는 상태를 뜻한다."
@@ -120,10 +137,31 @@
             <h3 class="accent">랭크 게임 전 '손풀기'가 선택이 아닌 필수인 이유</h3>
             <p>근육을 사용하는 스포츠 선수들이 본 경기에 앞서 스트레칭과 웜업을 하듯, 뇌와 미세 소근육을 사용하는 e스포츠에서도 <strong>'신경 예열'</strong>은 절대적입니다. 자고 일어났거나, 퇴근 후 지친 상태에서 첫 판을 돌리면 마우스 커서가 챔피언 위를 헛돌고 스킬 콤보가 꼬이는 경험을 해보셨을 것입니다.</p>
 
-            <p>LOLPhysical.xyz가 제공하는 <strong>[뇌·손 협응 예열 훈련]</strong>과 <strong>[실전 카이팅 생존]</strong>은 바로 이 굳어있는 신경망을 단기간에 극도로 자극하기 위해 설계되었습니다. 단순한 미니게임이 아닙니다. 실제 인게임에서 가장 많이 사용되는 마우스 이동 거리(Flick)와 클릭 타이밍, 그리고 돌발적으로 날아오는 스킬샷에 대한 회피 기동을 압축하여 반복 숙달시키는 시스템입니다.</p>
+            <p>LOLPhysical.xyz가 제공하는 <strong>[뇌·손 협응 예열 훈련]</strong>과 <strong>[실전 카이팅 생존]</strong>은 바로 이 굳어있는 신경망을 단기간에 극도로 자극하기 위해 설계되었습니다. 실제 인게임에서 가장 많이 사용되는 마우스 이동 거리(Flick)와 클릭 타이밍을 압축하여 반복 숙달시키는 시스템입니다.</p>
 
-            <p>랭크 게임을 돌리기 전, 이 훈련소에서 단 5분만 투자해 보십시오. 마우스가 커서가 내 생각과 일치하여 챔피언에 정확히 꽂히는 <strong>'몰입 상태(Flow State)'</strong>를 경험하시게 될 것입니다. 당신의 진짜 티어는 손가락이 풀린 직후부터 시작됩니다.</p>
+            <p>랭크 게임을 돌리기 전, 이 훈련소에서 단 5분만 투자해 보십시오. 마우스가 커서가 내 생각과 일치하여 챔피언에 정확히 꽂히는 <strong>'몰입 상태(Flow State)'</strong>를 경험하시게 될 것입니다.</p>
         </article>
+
+
+        <div class="science-board">
+            <h3>피지컬 & 뇌과학 아카이브</h3>
+            <p style="font-size:14px; color:#888; margin-top:-10px; margin-bottom:20px;">무작정 손가락만 혹사시키지 마세요. 게임 피지컬의 원리를 다룬 전문 칼럼을 읽어보세요.</p>
+            
+            <ul class="article-list" id="articleList">
+                <li>
+                    <a href="#">[칼럼] 에이징 커브는 거짓이다: 뇌 가소성과 반응속도의 비밀</a>
+                    <span class="badge-hot">HOT</span>
+                </li>
+                <li>
+                    <a href="#">[칼럼] '어택땅' 메커니즘 분석과 마우스 그립법의 상관관계</a>
+                    <span class="badge-ready">NEW</span>
+                </li>
+                <li>
+                    <a href="#">[칼럼] 동체시력 훈련이 실제 티어 상승으로 이어지는 과학적 근거</a>
+                    <span class="badge-ready">추천</span>
+                </li>
+            </ul>
+        </div>
 
         <footer>
             <p>© 2026 LoL Physical Trainer. All rights reserved. | <a href="privacy.html">개인정보처리방침(Privacy Policy)</a></p>
@@ -131,5 +169,17 @@
         </footer>
     </div>
 
+    <script src="articles.js"></script>
+    <script>
+        const articleListEl = document.getElementById('articleList');
+        // 만약 articles.js 파일에 데이터가 있다면 기존 하드코딩 목록 아래에 추가됩니다.
+        if (typeof articles !== 'undefined' && articles.length > 0) {
+            articles.forEach(article => {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="${article.link}">${article.title}</a><span class="badge-ready">${article.status}</span>`;
+                articleListEl.appendChild(li);
+            });
+        }
+    </script>
 </body>
 </html>
