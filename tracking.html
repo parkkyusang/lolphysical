@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="롤(LoL) 피지컬 트레이닝. 뇌지컬을 핑계 삼지 마세요. 당신의 진짜 반응속도를 측정합니다.">
-    <title>LoL 피지컬 트레이너 - LOLPhysical.xyz</title>
+    <title>뇌·손 협응 예열 훈련 - LOLPhysical.xyz</title>
     <style>
         body { margin: 0; background-color: #121212; color: #e0e0e0; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; user-select: none; }
         
-        /* 상단 여백 극한 압축 */
         .container { max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; flex-direction: column; align-items: center; }
         header { text-align: center; margin-bottom: 10px; width: 100%; position: relative; }
         h1 { color: #00ffcc; text-shadow: 0 0 15px rgba(0, 255, 204, 0.4); margin: 0; font-size: 2rem; word-break: keep-all; }
@@ -24,18 +22,10 @@
         .best-score { font-size: 14px; color: #ffd700; font-weight: bold; text-shadow: 1px 1px 2px #000; margin-bottom: 3px; }
         .tier-badge { display: inline-block; padding: 4px 12px; border-radius: 15px; background-color: #333; color: #fff; font-weight: bold; font-size: 14px; border: 1px solid #555; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
 
-        /* 게임 영역: 축소 코드 제거, 원래 크기 100% 유지 */
-        .game-area { 
-            position: relative; margin-bottom: 40px; 
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6); border-radius: 4px; overflow: hidden; background-color: #0e0e10; 
-        }
+        .game-area { position: relative; margin-bottom: 40px; box-shadow: 0 0 40px rgba(0, 0, 0, 0.6); border-radius: 4px; overflow: hidden; background-color: #0e0e10; }
         canvas { display: block; border: 1px solid #333; cursor: crosshair; }
 
-        .message-box {
-            background-color: rgba(0, 0, 0, 0.92); padding: 35px; border-radius: 15px; border: 1px solid #444;
-            position: absolute; top: 42%; left: 50%; transform: translate(-50%, -50%);
-            box-shadow: 0 0 30px rgba(0,0,0,0.8); min-width: 320px; text-align: center; z-index: 20;
-        }
+        .message-box { background-color: rgba(0, 0, 0, 0.92); padding: 35px; border-radius: 15px; border: 1px solid #444; position: absolute; top: 42%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 30px rgba(0,0,0,0.8); min-width: 320px; text-align: center; z-index: 20; }
         
         .input-group { margin: 15px 0; display: flex; gap: 10px; justify-content: center; }
         select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 15px; font-weight: bold; cursor: pointer; }
@@ -71,12 +61,12 @@
 
     <div class="container">
         <header>
-            <h1>LoL 피지컬 트레이너</h1>
-            <div class="subtitle">실전 무빙 트래킹(Tracking) · 반응속도 · 정확도</div>
+            <h1>뇌·손 협응 예열 훈련</h1>
+            <div class="subtitle">마우스-키보드 협응 · 랭크 전 손풀기 · 반응속도</div>
             
             <div class="nav-menu">
                 <a href="index.html" class="nav-btn" style="background: transparent; border: none; font-size: 18px; padding: 6px;">🏠 로비</a>
-                <a href="tracking.html" class="nav-btn active">기본 트래킹 훈련</a>
+                <a href="tracking.html" class="nav-btn active">뇌·손 협응 예열</a>
                 <a href="kiting.html" class="nav-btn">실전 카이팅 훈련</a>
             </div>
         </header>
@@ -100,7 +90,7 @@
                     </select>
                     <input type="text" id="riotIdInput" placeholder="소환사명 (최대 8자)" maxlength="8">
                 </div>
-                <button class="btn" onclick="startGame()">훈련 시작 (스페이스바)</button>
+                <button class="btn" onclick="startGame()">예열 시작 (스페이스바)</button>
                 <p style="font-size:13px; color:#888; margin-top:15px;">*입력한 ID는 결과 화면에 표시됩니다.</p>
             </div>
 
@@ -128,22 +118,22 @@
         </div>
 
         <article class="content-section">
-            <h2>팩트 폭격: 당신의 진짜 티어는?</h2>
-            <p>상대 챔피언은 가만히 서서 맞아주지 않습니다. 머리로는 이미 챌린저인데 무빙 치는 적을 클릭하지 못해 방생하시나요?<br>
-            뇌지컬로 포장하는 것도 한계가 있습니다. 이 트레이너는 타협 없는 숫자로 당신의 진짜 피지컬 현주소를 보여줍니다.</p>
+            <h2>팩트 폭격: 당신의 진짜 협응력 티어는?</h2>
+            <p>머리로는 이미 스킬을 눌렀는데 손가락이 꼬여서 방생하시나요?<br>
+            눈으로 보고, 마우스로 쫓고, 정확한 키를 누르는 <strong>'신경 협응력'</strong>을 숫자로 증명합니다. 랭크 게임 전 굳은 손을 풀기에 가장 완벽한 훈련입니다.</p>
             
             <h3>티어별 팩트 체크 (목표 점수)</h3>
             <ul>
-                <li><span style="color:#00ffcc">CHALLENGER (2500+)</span>: 괴물. 무빙을 예측해서 찍어누르는 프로게이머 수준.</li>
-                <li><span style="color:#f35588">GRANDMASTER (2000~2490)</span>: 어디 가서 손가락 탓할 일 없는 상위 0.1% 피지컬.</li>
-                <li><span style="color:#d192fd">MASTER (1500~1990)</span>: 매드무비 제조기. 확실한 고수 반열.</li>
-                <li><span style="color:#576bce">DIAMOND (1200~1490)</span>: 훌륭한 피지컬. 뇌지컬만 탑재하면 마스터 가능.</li>
-                <li><span style="color:#00d26a">EMERALD (1000~1190)</span>: 손은 빠른데 가끔 뇌절하는 구간.</li>
+                <li><span style="color:#00ffcc">CHALLENGER (2500+)</span>: 뇌와 손이 완벽히 일치하는 페이커급 협응력.</li>
+                <li><span style="color:#f35588">GRANDMASTER (2000~2490)</span>: 어디 가서 핑 탓, 손가락 탓 안 하는 피지컬.</li>
+                <li><span style="color:#d192fd">MASTER (1500~1990)</span>: 찰나의 순간에 콤보를 우겨넣는 확실한 고수.</li>
+                <li><span style="color:#576bce">DIAMOND (1200~1490)</span>: 훌륭한 반응속도. 뇌지컬만 탑재하면 마스터 가능.</li>
+                <li><span style="color:#00d26a">EMERALD (1000~1190)</span>: 손은 빠른데 스펠과 스킬 키를 가끔 헷갈리는 구간.</li>
                 <li><span style="color:#2ec4b6">PLATINUM (800~990)</span>: 1인분은 확실히 하는 안정적인 트래킹.</li>
                 <li><span style="color:#ffd700">GOLD (600~790)</span>: 흔히 볼 수 있는 평범한 에임.</li>
-                <li><span style="color:#c0c0c0">SILVER (400~590)</span>: 카이팅 하다가 멈춰서 맞는 구간. 땅클릭 장인.</li>
-                <li><span style="color:#cd7f32">BRONZE (200~390)</span>: 스킬 날아오는 거 보고 플래시 쓰면 이미 죽어있음.</li>
-                <li><span style="color:#5a5a5a">IRON (0~190)</span>: 마우스에 때가 꼈거나 모니터가 꺼져있는지 확인 요망.</li>
+                <li><span style="color:#c0c0c0">SILVER (400~590)</span>: 점멸(D/F) 쓰려다 궁극기(R) 날리는 구간.</li>
+                <li><span style="color:#cd7f32">BRONZE (200~390)</span>: 화면 놓치고 자기 캐릭터 어딨는지 찾는 중.</li>
+                <li><span style="color:#5a5a5a">IRON (0~190)</span>: 키보드에 손 올리는 법부터 다시 배워야 함.</li>
             </ul>
             
             <div class="science-board">
@@ -199,7 +189,6 @@
         let mouse = { x: 0, y: 0 };
         const safeTopMargin = 0;
 
-        // 원본 크기를 복구했으므로 정밀 좌표 보정 코드 적용
         function updateMousePos(e) {
             const rect = canvas.getBoundingClientRect();
             const scaleX = canvas.width / rect.width;
@@ -384,7 +373,7 @@
 
         function copyResult() {
             const region = regionSelect.value; const id = riotIdInput.value || "익명"; const tier = tierBadgeEl.innerText;
-            const text = `[롤 피지컬 트레이너 - 기본 트래킹]\n당신의 진짜 티어는?\n티어: ${tier}\n점수: ${score}점\n플레이어: [${region}] ${id}\n\n도전하기: https://lolphysical.xyz/tracking.html`;
+            const text = `[롤 피지컬 트레이너 - 뇌·손 협응 예열]\\n당신의 진짜 티어는?\\n티어: ${tier}\\n점수: ${score}점\\n플레이어: [${region}] ${id}\\n\\n도전하기: https://lolphysical.xyz/tracking.html`;
             navigator.clipboard.writeText(text).then(() => { alert("결과가 복사되었습니다! 카톡/디스코드/커뮤니티에 팩트 폭격을 날려보세요."); });
         }
         

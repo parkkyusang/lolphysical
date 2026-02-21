@@ -14,7 +14,6 @@
         .subtitle { color: #aaa; font-size: 1.2rem; margin-top: 15px; }
         .highlight { color: #00ffcc; font-weight: bold; }
 
-        /* 게임 선택 카드 레이아웃 */
         .card-container { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; width: 100%; margin-bottom: 60px; }
         
         .game-card {
@@ -22,35 +21,28 @@
             width: 320px; text-decoration: none; color: #fff; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; overflow: hidden;
         }
-        .game-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #333; transition: 0.3s;
-        }
-        
+        .game-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #333; transition: 0.3s; }
         .game-card:hover { transform: translateY(-10px); background-color: #222; }
         
-        /* 트래킹 카드 특화 */
         .card-tracking:hover { border-color: #00ffcc; box-shadow: 0 15px 30px rgba(0, 255, 204, 0.15); }
         .card-tracking:hover::before { background: #00ffcc; }
         .card-tracking h2 { color: #00ffcc; }
 
-        /* 카이팅 카드 특화 */
         .card-kiting:hover { border-color: #ff3366; box-shadow: 0 15px 30px rgba(255, 51, 102, 0.15); }
         .card-kiting:hover::before { background: #ff3366; }
         .card-kiting h2 { color: #ff3366; }
 
-        /* 신규 개발(준비중) 카드 */
         .card-locked { border-color: #222; opacity: 0.6; cursor: not-allowed; }
         .card-locked:hover { transform: none; background-color: #1a1a1d; }
         .card-locked h2 { color: #666; }
 
         .game-card h2 { margin: 0 0 15px 0; font-size: 1.8rem; }
-        .game-card p { color: #aaa; font-size: 15px; margin: 0 0 25px 0; line-height: 1.5; }
+        .game-card p { color: #aaa; font-size: 15px; margin: 0 0 25px 0; line-height: 1.5; word-break: keep-all; }
         
         .play-btn { background: #333; color: #fff; padding: 10px 25px; border-radius: 30px; font-weight: bold; font-size: 14px; transition: 0.3s; }
         .card-tracking:hover .play-btn { background: #00ffcc; color: #000; }
         .card-kiting:hover .play-btn { background: #ff3366; color: #fff; }
 
-        /* 뇌과학 아카이브 게시판 (메인 노출) */
         .science-board { width: 100%; max-width: 800px; background-color: #111; border: 1px solid #333; border-radius: 12px; padding: 30px; box-sizing: border-box; }
         .science-board h3 { margin: 0 0 20px 0; color: #fff; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
         .science-board h3::before { content: '🧠'; font-size: 1.8rem; }
@@ -75,8 +67,8 @@
 
         <div class="card-container">
             <a href="tracking.html" class="game-card card-tracking">
-                <h2>기본 트래킹 훈련</h2>
-                <p>쉴 새 없이 움직이는 타겟을 쫓아라.<br>순수 마우스 에임과 반응속도를 측정하는<br>가장 직관적인 피지컬 테스트입니다.</p>
+                <h2>실전 예열: 뇌·손 협응</h2>
+                <p>랭크 게임 전, 굳어있는 신경을 깨우세요.<br>마우스 에임과 자주 누르는 스킬 키(QWE 등) 간의<br>정밀한 협응력을 끌어올리는 손풀기 훈련입니다.</p>
                 <div class="play-btn">입장하기</div>
             </a>
 
@@ -96,8 +88,7 @@
         <div class="science-board">
             <h3>피지컬 향상을 위한 뇌과학 아카이브</h3>
             <p style="font-size:14px; color:#888; margin-top:-10px; margin-bottom:20px;">무작정 손가락만 혹사시키지 마세요. 훈련이 어떻게 신경망을 자극하는지 이해해야 합니다.</p>
-            <ul class="article-list" id="articleList">
-                </ul>
+            <ul class="article-list" id="articleList"></ul>
         </div>
 
         <footer>
@@ -107,15 +98,11 @@
 
     <script src="articles.js"></script>
     <script>
-        // 게시판 목록 자동 생성
         const articleListEl = document.getElementById('articleList');
         if (typeof articles !== 'undefined') {
             articles.forEach(article => {
                 const li = document.createElement('li');
-                li.innerHTML = `
-                    <a href="${article.link}">${article.title}</a>
-                    <span class="badge-ready">${article.status}</span>
-                `;
+                li.innerHTML = `<a href="${article.link}">${article.title}</a><span class="badge-ready">${article.status}</span>`;
                 articleListEl.appendChild(li);
             });
         }
