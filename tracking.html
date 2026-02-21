@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="롤(LoL) 피지컬 트레이닝. 뇌지컬을 핑계 삼지 마세요. 당신의 진짜 반응속도를 측정합니다.">
+    <title>LoL 피지컬 트레이너 (BETA) - LOLPhysical.xyz</title>
+    <style>
+        /* 기본 스타일 */
+        body { margin: 0; background-color: #121212; color: #e0e0e0; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; user-select: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        
+        header { text-align: center; margin-bottom: 20px; width: 100%; position: relative; }
+        h1 { color: #00ffcc; text-shadow: 0 0 15px rgba(0, 255, 204, 0.4); margin: 0; font-size: 2.5rem; word-break: keep-all; }
+        .subtitle { color: #aaa; font-size: 1rem; margin-top: 10px; }
+
+        /* 네비게이션 메뉴 */
+        .nav-menu { margin-top: 15px; display: flex; gap: 15px; justify-content: center; align-items: center; }
+        .nav-btn { background: #222; color: #fff; border: 1px solid #444; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; transition: 0.2s; }
+        .nav-btn:hover { background: #333; border-color: #00ffcc; color: #00ffcc; }
+        .nav-btn.active { background: #00ffcc; color: #000; border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.5); }
+
+        .game-area {
+            position: relative;
+            margin-bottom: 40px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+            border-radius: 4px;
+            overflow: hidden;
+            background-color: #0e0e10;
+        }
+        canvas { border: 1px solid #333; cursor: crosshair; display: block; }
+
+        #ui-layer {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 100%;
+            z-index: 10;
+        }
+        .score-board { 
+            font-size: 24px; font-weight: 800; color: #fff; 
+            text-shadow: 2px 2px 0px #000;
+            margin-bottom: 10px;
+        }
+        .best-score {
+            font-size: 16px; color: #ffd700; font-weight: bold;
+            text-shadow: 1px 1px 2px #000;
+            margin-bottom: 5px;
+        }
+        .tier-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            background-color: #333;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            border: 1px solid #555;
+            margin-top: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        
+        /* 메시지 박스 스타일 */
+        .message-box {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #444;
+            display: inline-block;
+            margin-top: 60px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            min-width: 300px;
+        }
+        
+        .input-group { margin: 15px 0; display: flex; gap: 10px; justify-content: center; }
+        select { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        input[type="text"] { background: #222; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; font-size: 16px; width: 180px; text-align: center; }
+        select:focus, input[type="text"]:focus { outline: none; border-color: #00ffcc; }
+        
+        .btn {
+            background: #00ffcc; color: #000; border: none; padding: 12px 24px; border-radius: 5px;
+            font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 15px; transition: 0.2s;
+        }
+        .btn:hover { background: #00dbaf; transform: scale(1.05); }
+        .btn-outline { background: transparent; border: 1px solid #00ffcc; color: #00ffcc; }
+        .btn-outline:hover { background: rgba(0, 255, 204, 0.1); }
+
+        .content-section { background-color: #1a1a1d; padding: 40px; border-radius: 15px; max-width: 800px; width: 100%; box-sizing: border-box; margin-top: 20px; }
+        h2 { color: #f0e6d2; border-bottom: 1px solid #333; padding-bottom: 15px; margin-top: 40px; }
+        h3 { color: #ccc; margin-top: 25px; }
+        p, ul { color: #b0b0b0; }
+        .highlight { color: #00ffcc; font-weight: bold; }
+        
+        /* 뇌과학 아카이브 게시판 스타일 */
+        .science-board {
+            margin-top: 40px;
+            background-color: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .science-board h3 { margin-top: 0; color: #00ffcc; border-bottom: none; padding-bottom: 0; font-size: 1.3rem; }
+        .article-list { list-style: none; padding: 0; margin: 0; }
+        .article-list li {
+            border-bottom: 1px solid #222;
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .article-list li:last-child { border-bottom: none; }
+        .article-list a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.2s;
+            display: block;
+            flex-grow: 1;
+        }
+        .article-list a:hover { color: #00ffcc; text-decoration: underline; }
+        .badge-ready { background: #333; color: #888; font-size: 12px; padding: 3px 8px; border-radius: 12px; white-space: nowrap; margin-left: 10px;}
+
+        /* 방명록 영역 */
+        .comment-section {
+            margin-top: 50px;
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            background: #1a1a1d;
+            border-radius: 10px;
+        }
+
+        footer { margin-top: 60px; padding: 30px; text-align: center; font-size: 13px; color: #666; border-top: 1px solid #222; width: 100%; }
+        .beta-tag { color: #ff5555; font-weight: bold; font-size: 12px; border: 1px solid #ff5555; padding: 2px 6px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
+    </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9819985404574274" crossorigin="anonymous"></script>
+    
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>LoL 피지컬 트레이너 <span class="beta-tag">BETA</span></h1>
+            <div class="subtitle">실전 무빙 트래킹(Tracking) · 반응속도 · 정확도</div>
+            
+            <div class="nav-menu">
+                <a href="index.html" class="nav-btn" style="background: transparent; border: none; font-size: 20px; padding: 8px;">🏠 로비</a>
+                <a href="tracking.html" class="nav-btn active">기본 트래킹 훈련</a>
+                <a href="kiting.html" class="nav-btn">실전 카이팅 훈련</a>
+            </div>
+            </header>
+
+        <div class="game-area">
+            <div id="ui-layer">
+                <div class="best-score">내 최고 기록: <span id="bestScoreVal">0</span></div>
+                <div class="score-board">점수: <span id="scoreVal">0</span> | 목숨: <span id="lifeVal">5</span></div>
+                <div class="tier-badge" id="tierBadge">UNRANKED</div>
+                
+                <div id="startScreen" class="message-box">
+                    <h2 style="margin:0 0 15px 0; color:#fff;">소환사님 환영합니다</h2>
+                    <div class="input-group">
+                        <select id="regionSelect">
+                            <option value="KR">KR</option>
+                            <option value="NA">NA</option>
+                            <option value="EUW">EUW</option>
+                            <option value="JP">JP</option>
+                            <option value="ETC">ETC</option>
+                        </select>
+                        <input type="text" id="riotIdInput" placeholder="소환사명 (최대 8자)" maxlength="8">
+                    </div>
+                    <button class="btn" onclick="startGame()">훈련 시작 (스페이스바)</button>
+                    <p style="font-size:13px; color:#888; margin-top:15px;">*입력한 ID는 결과 화면에 표시됩니다.</p>
+                </div>
+
+                <div id="gameOverScreen" class="message-box" style="display:none;">
+                    <h2 style="margin:0 0 10px 0; color:#ff5555;">GAME OVER</h2>
+                    <p style="font-size:18px; color:#fff;">
+                        <span id="resultId" style="color:#00ffcc; font-weight:bold;"></span> 님의 결과<br>
+                        최종 점수: <span id="resultScore" style="font-size:28px; font-weight:bold;">0</span>점
+                    </p>
+                    <div id="resultTier" style="margin-bottom:20px; font-size:24px; font-weight:bold;"></div>
+                    
+                    <button class="btn" onclick="copyResult()">📋 결과 복사해서 팩트 폭격하기</button>
+                    <button class="btn btn-outline" onclick="restartGame()">다시 도전 (스페이스바)</button>
+                    
+                    <div style="margin-top:20px; font-size:14px; color:#aaa;">
+                        ▼ 아래 방명록에 점수를 남겨 듀오를 구해보세요! ▼
+                    </div>
+                </div>
+            </div>
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+        </div>
+
+        <div class="comment-section">
+            <h3 style="text-align:center; color:#ccc;">명예의 전당 & 방명록</h3>
+            <p style="text-align:center; font-size:14px; color:#666; margin-bottom:20px;">자신의 진짜 피지컬을 박제하고 친구 추가를 해보세요.</p>
+            <div id="utterances-container">
+                <script src="https://utteranc.es/client.js"
+                        repo="parkkyusang/lolphysical"
+                        issue-term="pathname"
+                        theme="github-dark"
+                        crossorigin="anonymous"
+                        async>
+                </script>
+            </div>
+        </div>
+
+        <article class="content-section">
+            <h2>팩트 폭격: 당신의 진짜 티어는?</h2>
+            <p>상대 챔피언은 가만히 서서 맞아주지 않습니다. 머리로는 이미 챌린저인데 무빙 치는 적을 클릭하지 못해 방생하시나요?<br>
+            뇌지컬로 포장하는 것도 한계가 있습니다. 이 트레이너는 타협 없는 숫자로 당신의 진짜 피지컬 현주소를 보여줍니다.</p>
+            
+            <h3>티어별 팩트 체크 (목표 점수)</h3>
+            <ul>
+                <li><span style="color:#00ffcc">CHALLENGER (2500+)</span>: 괴물. 무빙을 예측해서 찍어누르는 프로게이머 수준.</li>
+                <li><span style="color:#f35588">GRANDMASTER (2000~2490)</span>: 어디 가서 손가락 탓할 일 없는 상위 0.1% 피지컬.</li>
+                <li><span style="color:#d192fd">MASTER (1500~1990)</span>: 매드무비 제조기. 확실한 고수 반열.</li>
+                <li><span style="color:#576bce">DIAMOND (1200~1490)</span>: 훌륭한 피지컬. 뇌지컬만 탑재하면 마스터 가능.</li>
+                <li><span style="color:#00d26a">EMERALD (1000~1190)</span>: 손은 빠른데 가끔 뇌절하는 구간.</li>
+                <li><span style="color:#2ec4b6">PLATINUM (800~990)</span>: 1인분은 확실히 하는 안정적인 트래킹.</li>
+                <li><span style="color:#ffd700">GOLD (600~790)</span>: 흔히 볼 수 있는 평범한 에임.</li>
+                <li><span style="color:#c0c0c0">SILVER (400~590)</span>: 카이팅 하다가 멈춰서 맞는 구간. 땅클릭 장인.</li>
+                <li><span style="color:#cd7f32">BRONZE (200~390)</span>: 스킬 날아오는 거 보고 플래시 쓰면 이미 죽어있음.</li>
+                <li><span style="color:#5a5a5a">IRON (0~190)</span>: 마우스에 때가 꼈거나 모니터가 꺼져있는지 확인 요망.</li>
+            </ul>
+            
+            <h3>조작법 및 실전 훈련 가이드</h3>
+            <p><strong>마우스 아이콘(좌/우클릭)</strong>, <strong>A키(평타)</strong>, <strong>QWER(스킬)</strong>은 자주 등장합니다. 갑자기 튀어나오는 <strong>D/F(스펠)</strong>, <strong>~(챔피언만 조준)</strong>, <strong>숫자키(아이템)</strong>에 당황하지 마세요. 타겟은 실제 챔피언처럼 끊임없이 무빙을 칩니다. 시야를 넓게 두고 마우스를 부드럽게 따라가세요.</p>
+            
+            <div class="science-board">
+                <h3>뇌과학과 피지컬 트레이닝 (Scientific Backing)</h3>
+                <p style="font-size:14px; color:#aaa; margin-bottom:15px;">이 훈련이 어떻게 뇌신경 가소성(Neuroplasticity)을 자극하고 실력을 향상시키는지 과학적 근거를 연재합니다.</p>
+                
+                <ul class="article-list" id="articleList"></ul>
+            </div>
+
+        </article>
+
+        <footer>
+            <p>© 2026 LoL Physical Trainer. All rights reserved. | <a href="privacy.html" style="color:#888; text-decoration:none;">개인정보처리방침(Privacy Policy)</a></p>
+        </footer>
+    </div>
+
+    <script src="articles.js"></script>
+
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('scoreVal');
+        const lifeEl = document.getElementById('lifeVal');
+        const bestScoreEl = document.getElementById('bestScoreVal');
+        const tierBadgeEl = document.getElementById('tierBadge');
+        
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const riotIdInput = document.getElementById('riotIdInput');
+        const regionSelect = document.getElementById('regionSelect');
+        
+        let score = 0;
+        let lives = 5;
+        let isPlaying = false;
+        
+        let bestScore = localStorage.getItem('lol_best_score') || 0;
+        bestScoreEl.innerText = bestScore;
+        
+        let savedId = localStorage.getItem('lol_name') || "";
+        let savedRegion = localStorage.getItem('lol_server') || "KR";
+        riotIdInput.value = savedId;
+        regionSelect.value = savedRegion;
+        
+        let target = { x: 0, y: 0, radius: 40, key: '', creationTime: 0, lifeTime: 2000, vx: 0, vy: 0 };
+
+        const keyPool = [
+            'Q', 'Q', 'Q', 'W', 'W', 'W', 'E', 'E', 'E', 'R', 'R', 'R',
+            'A', 'A', 'A', 'A', 'A',
+            '우클릭', '우클릭', '우클릭', '우클릭', '우클릭',
+            'D', 'F', '1', '2', '3', '좌클릭', '~'
+        ];
+        
+        let mouse = { x: 0, y: 0 };
+        const safeTopMargin = 150; 
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+
+        function checkHit(inputKey) {
+            if (!isPlaying) return;
+            const dist = Math.hypot(mouse.x - target.x, mouse.y - target.y);
+
+            if (dist < target.radius) {
+                if (inputKey === target.key) {
+                    successHit();
+                }
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            const isInputFocus = (document.activeElement === riotIdInput || document.activeElement === regionSelect);
+            if (e.code === 'Space') { if (!isInputFocus) e.preventDefault(); }
+            if (e.code === 'Space' && !isPlaying && !isInputFocus) {
+                if(startScreen.style.display !== 'none') startGame();
+                else if(gameOverScreen.style.display !== 'none') restartGame();
+                return;
+            }
+            if (!isPlaying) return;
+
+            let pressedKey = e.key.toUpperCase();
+            if (e.code === 'Backquote') pressedKey = '~'; 
+
+            checkHit(pressedKey);
+        });
+
+        canvas.addEventListener('mousedown', (e) => {
+            if (!isPlaying) return;
+            let pressedBtn = '';
+            if (e.button === 0) pressedBtn = '좌클릭';
+            else if (e.button === 2) pressedBtn = '우클릭';
+            
+            if (pressedBtn) checkHit(pressedBtn);
+        });
+
+        function startGame() {
+            const idVal = riotIdInput.value.trim();
+            const regionVal = regionSelect.value;
+            
+            if(idVal) localStorage.setItem('lol_name', idVal);
+            localStorage.setItem('lol_server', regionVal);
+
+            startScreen.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            score = 0;
+            lives = 5;
+            isPlaying = true;
+            updateUI();
+            updateTier(); 
+            spawnTarget();
+            loop();
+        }
+
+        function restartGame() {
+            startGame();
+        }
+
+        function spawnTarget() {
+            target.x = 60 + Math.random() * (canvas.width - 120);
+            target.y = safeTopMargin + Math.random() * (canvas.height - safeTopMargin - 60);
+            
+            const randomIndex = Math.floor(Math.random() * keyPool.length);
+            target.key = keyPool[randomIndex];
+            target.creationTime = Date.now();
+            target.lifeTime = Math.max(500, 2000 - (score * 1.2));
+
+            const currentSpeed = Math.min(4.0, 1.5 + (score * 0.0015));
+            const angle = Math.random() * Math.PI * 2; 
+            target.vx = Math.cos(angle) * currentSpeed;
+            target.vy = Math.sin(angle) * currentSpeed;
+        }
+
+        function successHit() {
+            score += 10;
+            updateTier(); 
+            spawnTarget();
+            updateUI();
+        }
+
+        function updateTier() {
+            let tier = "UNRANKED";
+            let color = "#888";
+
+            if (score >= 2500) { tier = "CHALLENGER"; color = "#00ffcc"; } 
+            else if (score >= 2000) { tier = "GRANDMASTER"; color = "#f35588"; } 
+            else if (score >= 1500) { tier = "MASTER"; color = "#d192fd"; } 
+            else if (score >= 1200) { tier = "DIAMOND"; color = "#576bce"; } 
+            else if (score >= 1000) { tier = "EMERALD"; color = "#00d26a"; } 
+            else if (score >= 800) { tier = "PLATINUM"; color = "#2ec4b6"; } 
+            else if (score >= 600) { tier = "GOLD"; color = "#ffd700"; } 
+            else if (score >= 400) { tier = "SILVER"; color = "#c0c0c0"; } 
+            else if (score >= 200) { tier = "BRONZE"; color = "#cd7f32"; } 
+            else if (score >= 0) { tier = "IRON"; color = "#5a5a5a"; } 
+
+            tierBadgeEl.innerText = tier;
+            tierBadgeEl.style.color = color;
+            tierBadgeEl.style.borderColor = color;
+            return { text: tier, color: color };
+        }
+
+        function drawMouseIcon(ctx, x, y, radius, type) {
+            const w = 26; 
+            const h = 42; 
+            const mx = x - w/2;
+            const my = y - h/2;
+            const r = 10; 
+
+            ctx.beginPath();
+            ctx.roundRect(mx, my, w, h, r);
+            ctx.fillStyle = '#222';
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#fff';
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.roundRect(mx, my, w/2, h*0.4, [r, 0, 0, 0]);
+            ctx.fillStyle = type === '좌클릭' ? '#ff3333' : '#222'; 
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.roundRect(mx + w/2, my, w/2, h*0.4, [0, r, 0, 0]);
+            ctx.fillStyle = type === '우클릭' ? '#ff3333' : '#222'; 
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.roundRect(x - 2, my + h*0.08, 4, h*0.2, 2);
+            ctx.fillStyle = '#fff';
+            ctx.fill();
+        }
+
+        function loop() {
+            if (!isPlaying) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const now = Date.now();
+            if (now - target.creationTime > target.lifeTime) {
+                lives--;
+                updateUI();
+                if (lives <= 0) {
+                    gameOver();
+                    return;
+                }
+                spawnTarget(); 
+            }
+
+            target.x += target.vx;
+            target.y += target.vy;
+
+            if (target.x - target.radius <= 0 || target.x + target.radius >= canvas.width) {
+                target.vx *= -1; 
+                target.x = Math.max(target.radius, Math.min(target.x, canvas.width - target.radius));
+            }
+            if (target.y - target.radius <= safeTopMargin || target.y + target.radius >= canvas.height) {
+                target.vy *= -1; 
+                target.y = Math.max(safeTopMargin + target.radius, Math.min(target.y, canvas.height - target.radius));
+            }
+
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
+            
+            if (['D', 'F', '1', '2', '3', '~'].includes(target.key)) {
+                ctx.fillStyle = '#FFD700'; 
+                ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
+                ctx.fillStyle = '#000'; ctx.font = 'bold 36px sans-serif';
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillText(target.key, target.x, target.y);
+            } 
+            else if (['좌클릭', '우클릭'].includes(target.key)) {
+                ctx.fillStyle = '#1a1a1d'; 
+                ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#ff5555'; ctx.stroke();
+                drawMouseIcon(ctx, target.x, target.y, target.radius, target.key);
+            } 
+            else {
+                ctx.fillStyle = '#00CED1'; 
+                ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
+                ctx.fillStyle = '#000'; ctx.font = 'bold 36px sans-serif';
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillText(target.key, target.x, target.y);
+            }
+            
+            const timeLeftRatio = 1 - (now - target.creationTime) / target.lifeTime;
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.radius + 6, -Math.PI/2, (-Math.PI/2) + (Math.PI * 2 * timeLeftRatio));
+            ctx.strokeStyle = '#ff4444';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            requestAnimationFrame(loop);
+        }
+
+        function updateUI() {
+            scoreEl.innerText = score;
+            lifeEl.innerText = lives;
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem('lol_best_score', bestScore);
+                bestScoreEl.innerText = bestScore;
+            }
+            
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const tierInfo = updateTier();
+            const region = regionSelect.value;
+            const id = riotIdInput.value || "익명";
+            
+            document.getElementById('resultId').innerText = `[${region}] ${id}`;
+            document.getElementById('resultScore').innerText = score;
+            
+            const resTier = document.getElementById('resultTier');
+            resTier.innerText = tierInfo.text;
+            resTier.style.color = tierInfo.color;
+            
+            gameOverScreen.style.display = 'inline-block';
+        }
+
+        function copyResult() {
+            const region = regionSelect.value;
+            const id = riotIdInput.value || "익명";
+            const tier = tierBadgeEl.innerText;
+            const text = `[롤 피지컬 트레이너 - 기본 트래킹]\n당신의 진짜 티어는?\n티어: ${tier}\n점수: ${score}점\n플레이어: [${region}] ${id}\n\n도전하기: https://lolphysical.xyz/tracking.html`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert("결과가 복사되었습니다! 카톡/디스코드/커뮤니티에 팩트 폭격을 날려보세요.");
+            });
+        }
+        
+        const articleListEl = document.getElementById('articleList');
+        if (typeof articles !== 'undefined') {
+            articles.forEach(article => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <a href="${article.link}" target="_blank">${article.title}</a>
+                    <span class="badge-ready">${article.status}</span>
+                `;
+                articleListEl.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
