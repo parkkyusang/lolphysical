@@ -187,7 +187,6 @@
         ];
         
         let mouse = { x: 0, y: 0 };
-        const safeTopMargin = 0;
 
         function updateMousePos(e) {
             const rect = canvas.getBoundingClientRect();
@@ -266,9 +265,15 @@
             const randomIndex = Math.floor(Math.random() * keyPool.length);
             target.key = keyPool[randomIndex];
             target.creationTime = Date.now();
-            target.lifeTime = Math.max(500, 2000 - (score * 1.2));
-
-            const currentSpeed = Math.min(4.0, 1.5 + (score * 0.0015));
+            
+            // ★ 난이도 밸런스 완화 패치 ★
+            // 시작 시간을 2초에서 1.5초로 줄여 초반 텐션을 올리고, 
+            // 점수에 따른 감소폭을 대폭 줄여 유저가 한계 속도에서 오래 연습할 수 있게 함
+            target.lifeTime = Math.max(450, 1500 - (score * 0.4));
+            
+            // 속도 역시 시작 속도를 1.8로 소폭 올리고 상승 가속도를 줄임
+            const currentSpeed = Math.min(4.5, 1.8 + (score * 0.0008));
+            
             const angle = Math.random() * Math.PI * 2; 
             target.vx = Math.cos(angle) * currentSpeed;
             target.vy = Math.sin(angle) * currentSpeed;
@@ -373,7 +378,7 @@
 
         function copyResult() {
             const region = regionSelect.value; const id = riotIdInput.value || "익명"; const tier = tierBadgeEl.innerText;
-            const text = `[롤 피지컬 트레이너 - 뇌·손 협응 예열]\\n당신의 진짜 티어는?\\n티어: ${tier}\\n점수: ${score}점\\n플레이어: [${region}] ${id}\\n\\n도전하기: https://lolphysical.xyz/tracking.html`;
+            const text = `[롤 피지컬 트레이너 - 뇌·손 협응 예열]\n당신의 진짜 티어는?\n티어: ${tier}\n점수: ${score}점\n플레이어: [${region}] ${id}\n\n도전하기: https://lolphysical.xyz/tracking.html`;
             navigator.clipboard.writeText(text).then(() => { alert("결과가 복사되었습니다! 카톡/디스코드/커뮤니티에 팩트 폭격을 날려보세요."); });
         }
         

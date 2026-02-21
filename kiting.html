@@ -268,8 +268,9 @@
                 aKeyPrimed = false; 
                 let isAttack = false;
                 
+                // ★ 피격 판정 범위(히트박스) 대폭 상향 (40px -> 80px) ★
                 for(let i=0; i<enemies.length; i++) {
-                    if(Math.hypot(mouse.x - enemies[i].x, mouse.y - enemies[i].y) <= enemies[i].radius + 40) {
+                    if(Math.hypot(mouse.x - enemies[i].x, mouse.y - enemies[i].y) <= enemies[i].radius + 80) {
                         isAttack = true; break;
                     }
                 }
@@ -316,12 +317,18 @@
             }
 
             let targetEnemy = null; let minDist = Infinity;
-            let hitRadiusBonus = isAClick ? 120 : 40; 
-
+            
             for (let i = 0; i < enemies.length; i++) {
                 let distToMouse = Math.hypot(targetX - enemies[i].x, targetY - enemies[i].y);
-                if (distToMouse <= enemies[i].radius + hitRadiusBonus && distToMouse < minDist) {
-                    minDist = distToMouse; targetEnemy = enemies[i];
+                if (isAClick) {
+                    if (distToMouse < minDist) {
+                        minDist = distToMouse; targetEnemy = enemies[i];
+                    }
+                } else {
+                    // ★ 피격 판정 범위(히트박스) 대폭 상향 (40px -> 80px) ★
+                    if (distToMouse <= enemies[i].radius + 80 && distToMouse < minDist) {
+                        minDist = distToMouse; targetEnemy = enemies[i];
+                    }
                 }
             }
 
