@@ -37,15 +37,15 @@ def rebuild_site():
         with open(output_filename, 'w', encoding='utf-8') as f:
             f.write(final_html)
 
-        # 큰따옴표("")로 감싸서 작은따옴표(') 충돌 완벽 방지
         articles.append({'title': title, 'date': date, 'link': output_filename})
 
     articles.sort(key=lambda x: x['date'], reverse=True)
     list_html = ""
     for article in articles:
-        # href 묶는 기호를 큰따옴표로 변경하여 에러 방지
-        list_html += f'<li><a href="{article["link"]}">{article["title"]}</a><span style="color:#666; font-size:0.9rem; margin-left:15px;">{article["date"]}</span></li>\n'
+        # 정상적인 HTML 태그 복구 완료 (날짜 없음)
+        list_html += f'<li><a href="{article["link"]}">{article["title"]}</a></li>\n'
 
+    # 엉뚱한 글 제목이 들어갔던 자리를 다시 정상적인 {{article_list}} 기호로 복구
     final_blog_html = blog_template.replace('{{article_list}}', list_html)
     with open('blog.html', 'w', encoding='utf-8') as f:
         f.write(final_blog_html)
@@ -111,7 +111,6 @@ def save_and_publish():
 
     if not current_file_path:
         date_str = datetime.now().strftime("%Y-%m-%d")
-        # ★ 한글, 영문, 숫자, 공백만 남기고 모든 특수문자 완벽 삭제
         safe_title = re.sub(r'[^\w\s가-힣]', '', title).strip().replace(" ", "_")
         current_file_path = f"posts/{date_str}_{safe_title}.md"
     else:

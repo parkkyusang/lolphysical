@@ -1,169 +1,31 @@
-import tkinter as tk
-from tkinter import messagebox, Listbox
-import os
-import glob
-import subprocess
-from datetime import datetime
-import markdown
-import re
-
-def rebuild_site():
-    POSTS_DIR = 'posts'
-    TEMPLATE_POST = 'templates/post_layout.html'
-    TEMPLATE_BLOG = 'templates/blog_layout.html'
-
-    with open(TEMPLATE_POST, 'r', encoding='utf-8') as f:
-        post_template = f.read()
-    with open(TEMPLATE_BLOG, 'r', encoding='utf-8') as f:
-        blog_template = f.read()
-
-    articles = []
-    for file_path in glob.glob(f'{POSTS_DIR}/*.md'):
-        with open(file_path, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
-        
-        if len(lines) < 3: continue
-        
-        title = lines[0].replace('Title:', '').strip()
-        date = lines[1].replace('Date:', '').strip()
-        content_md = ''.join(lines[3:])
-        
-        content_html = markdown.markdown(content_md, extensions=['nl2br'])
-        output_filename = os.path.basename(file_path).replace('.md', '.html')
-        
-        final_html = post_template.replace('{{title}}', title).replace('{{date}}', date).replace('{{content}}', content_html)
-        with open(output_filename, 'w', encoding='utf-8') as f:
-            f.write(final_html)
-        
-        articles.append({'title': title, 'date': date, 'link': output_filename})
-
-    articles.sort(key=lambda x: x['date'], reverse=True)
-    list_html = ""
-    for article in articles:
-        # ★ 게시판 목록에서 날짜 표시 부분(span 태그)을 완전히 삭제했습니다!
-        list_html += f'<li><a href="{article["link"]}">{article["title"]}</a></li>\n'
-
-    final_blog_html = blog_template.replace('{{article_list}}', list_html)
-    with open('blog.html', 'w', encoding='utf-8') as f:
-        f.write(final_blog_html)
-
-def git_push(commit_msg):
-    try:
-        subprocess.run(["git", "add", "."], check=True, creationflags=subprocess.CREATE_NO_WINDOW)
-        subprocess.run(["git", "commit", "-m", commit_msg], creationflags=subprocess.CREATE_NO_WINDOW)
-        subprocess.run(["git", "push"], check=True, creationflags=subprocess.CREATE_NO_WINDOW)
-        return True
-    except Exception as e:
-        messagebox.showerror("알림", "업로드 중 문제가 발생했습니다.")
-        return False
-
-current_file_path = None
-
-def load_post_list():
-    listbox.delete(0, tk.END)
-    for file_path in sorted(glob.glob('posts/*.md'), reverse=True):
-        filename = os.path.basename(file_path)
-        listbox.insert(tk.END, filename)
-
-def on_select_post(event):
-    global current_file_path
-    selection = listbox.curselection()
-    if not selection: return
-    
-    filename = listbox.get(selection[0])
-    current_file_path = f"posts/{filename}"
-    
-    with open(current_file_path, 'r', encoding='utf-8') as f:
-        lines = f.readlines()
-        
-    entry_title.delete(0, tk.END)
-    entry_title.insert(0, lines[0].replace('Title:', '').strip())
-    
-    text_content.delete("1.0", tk.END)
-    text_content.insert(tk.END, ''.join(lines[3:]))
-    
-    btn_publish.config(text="🔄 수정 후 발행하기", bg="#00ffcc", fg="black")
-
-def clear_editor():
-    global current_file_path
-    current_file_path = None
-    entry_title.delete(0, tk.END)
-    text_content.delete("1.0", tk.END)
-    btn_publish.config(text="🚀 새 글 저장 및 깃허브 발행", bg="#ff3366", fg="white")
-
-def save_and_publish():
-    global current_file_path
-    title = entry_title.get().strip()
-    content = text_content.get("1.0", tk.END).strip()
-
-    if not title or not content:
-        messagebox.showwarning("오류", "제목과 본문을 입력하세요.")
-        return
-
-    if not current_file_path:
-        date_str = datetime.now().strftime("%Y-%m-%d")
-        safe_title = re.sub(r'[^\w\s가-힣]', '', title).strip().replace(" ", "_")
-        current_file_path = f"posts/{date_str}_{safe_title}.md"
-    else:
-        with open(current_file_path, 'r', encoding='utf-8') as f:
-            date_str = f.readlines()[1].replace('Date:', '').strip()
-
-    with open(current_file_path, 'w', encoding='utf-8') as f:
-        f.write(f"Title: {title}\n")
-        f.write(f"Date: {date_str}\n\n")
-        f.write(content)
-
-    rebuild_site()
-    if git_push(f"Update post: {title}"):
-        messagebox.showinfo("성공", "🎉 사이트 업데이트 및 깃허브 발행이 완료되었습니다!")
-        load_post_list()
-        clear_editor()
-
-def delete_post():
-    global current_file_path
-    if not current_file_path: return
-    
-    if messagebox.askyesno("삭제 확인", "정말로 이 글을 삭제하시겠습니까?"):
-        os.remove(current_file_path)
-        html_file = current_file_path.replace('posts/', '').replace('.md', '.html')
-        if os.path.exists(html_file):
-            os.remove(html_file)
-            
-        rebuild_site()
-        if git_push(f"Delete post: {html_file}"):
-            messagebox.showinfo("삭제 완료", "글이 완전히 삭제되었습니다.")
-            load_post_list()
-            clear_editor()
-
-root = tk.Tk()
-root.title("LOLPhysical 블로그 매니저")
-root.geometry("850x600")
-root.configure(bg="#0a0a0c")
-
-frame_left = tk.Frame(root, bg="#0a0a0c")
-frame_left.pack(side=tk.LEFT, fill=tk.Y, padx=20, pady=20)
-
-tk.Label(frame_left, text="📋 내 칼럼 목록", fg="#00ffcc", bg="#0a0a0c", font=("Pretendard", 12, "bold")).pack(pady=5)
-listbox = Listbox(frame_left, width=25, height=25, bg="#111", fg="#fff", font=("Pretendard", 10))
-listbox.pack()
-listbox.bind('<<ListboxSelect>>', on_select_post)
-
-tk.Button(frame_left, text="✨ 새 글 쓰기", command=clear_editor, bg="#333", fg="#fff").pack(pady=10, fill=tk.X)
-tk.Button(frame_left, text="🗑️ 글 삭제하기", command=delete_post, bg="#cc0000", fg="#fff").pack(fill=tk.X)
-
-frame_right = tk.Frame(root, bg="#0a0a0c")
-frame_right.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=20, pady=20)
-
-tk.Label(frame_right, text="칼럼 제목", fg="#00ffcc", bg="#0a0a0c", font=("Pretendard", 12, "bold")).pack(anchor="w")
-entry_title = tk.Entry(frame_right, font=("Pretendard", 12))
-entry_title.pack(fill=tk.X, pady=5)
-
-tk.Label(frame_right, text="본문 (메모장처럼 그냥 엔터 치며 쓰세요)", fg="#00ffcc", bg="#0a0a0c", font=("Pretendard", 12, "bold")).pack(anchor="w", pady=(10,0))
-text_content = tk.Text(frame_right, height=20, font=("Pretendard", 11))
-text_content.pack(fill=tk.BOTH, expand=True, pady=5)
-
-btn_publish = tk.Button(frame_right, text="🚀 새 글 저장 및 깃허브 발행", command=save_and_publish, bg="#ff3366", fg="white", font=("Pretendard", 14, "bold"))
-btn_publish.pack(fill=tk.X, pady=10)
-
-load_post_list()
-root.mainloop()
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>피지컬 & 뇌과학 아카이브 - LOLPhysical</title>
+    <style>
+        body { margin: 0; background-color: #0a0a0c; color: #e0e0e0; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .container { max-width: 900px; margin: 40px auto; padding: 20px; }
+        header { text-align: center; margin-bottom: 50px; border-bottom: 1px solid #333; padding-bottom: 30px; }
+        h1 { color: #fff; font-size: 2.5rem; margin: 0; }
+        .article-list { list-style: none; padding: 0; background: #111; border-radius: 12px; border: 1px solid #222; padding: 20px; }
+        .article-list li { border-bottom: 1px solid #2a2a2d; padding: 15px 10px; display: flex; justify-content: space-between; align-items: center; }
+        .article-list a { color: #e0e0e0; text-decoration: none; font-size: 1.1rem; font-weight: bold; flex-grow: 1; }
+        .article-list a:hover { color: #00ffcc; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: #00ffcc; text-decoration: none; border: 1px solid #00ffcc; padding: 8px 15px; border-radius: 20px; transition: 0.2s; }
+        .back-btn:hover { background: rgba(0, 255, 204, 0.1); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← 로비로 돌아가기</a>
+        <header>
+            <h1>📚 피지컬 & 뇌과학 아카이브</h1>
+            <p style="color:#888;">무작정 손가락만 혹사시키지 마세요. 게임 피지컬의 원리를 다룬 전문 칼럼입니다.</p>
+        </header>
+        <ul class="article-list">
+            {{article_list}} 
+        </ul>
+    </div>
+</body>
+</html>
