@@ -1,0 +1,5 @@
+name: LOLPhysical
+description: LoL 피지컬 종합 훈련소
+markdown: kramdown
+permalink: /:year/:month/:day/:title/
+timezone: Asia/Seoul
