@@ -20,4 +20,9 @@
         <loc>https://lolphysical.xyz/blog.html</loc>
         <priority>0.8</priority>
     </url>
+    <url>
+        <loc>https://lolphysical.xyz/index.html</loc>
+        <priority>0.8</priority>
+    </url>
 </urlset>
+
