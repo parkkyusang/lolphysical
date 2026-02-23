@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>피지컬 & 뇌과학 아카이브 - LOLPhysical</title>
     <style>
-        body { margin: 0; background-color: #0a0a0c; color: #e0e0e0; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        body { margin: 0; background-color: #0a0a0c; color: #e0e0e0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; line-height: 1.6; }
         .container { max-width: 900px; margin: 40px auto; padding: 20px; }
         header { text-align: center; margin-bottom: 50px; border-bottom: 1px solid #333; padding-bottom: 30px; }
         h1 { color: #fff; font-size: 2.5rem; margin: 0; }
         .subtitle { color: #888; font-size: 1.1rem; margin-top: 10px; }
         
+        /* 게시판 리스트 스타일 */
         .article-list { list-style: none; padding: 0; margin: 0; background: #111; border-radius: 12px; border: 1px solid #222; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .article-list li { border-bottom: 1px solid #2a2a2d; padding: 20px 10px; display: flex; justify-content: space-between; align-items: center; }
+        .article-list li { border-bottom: 1px solid #2a2a2d; padding: 20px 10px; }
         .article-list li:last-child { border-bottom: none; }
-        .article-list a { color: #e0e0e0; text-decoration: none; font-size: 1.1rem; font-weight: bold; transition: 0.2s; flex-grow: 1; }
-        .article-list a:hover { color: #00ffcc; text-decoration: underline; }
+        .article-list a { color: #e0e0e0; text-decoration: none; font-size: 1.1rem; font-weight: bold; transition: 0.2s; display: block; }
+        .article-list a:hover { color: #00ffcc; transform: translateX(5px); }
         
         .back-btn { display: inline-block; margin-bottom: 20px; color: #00ffcc; text-decoration: none; font-weight: bold; padding: 8px 15px; border: 1px solid #00ffcc; border-radius: 20px; transition: 0.2s; }
         .back-btn:hover { background: rgba(0, 255, 204, 0.1); }
@@ -27,12 +28,16 @@
         
         <header>
             <h1>📚 피지컬 & 뇌과학 아카이브</h1>
-            <div class="subtitle">게임 피지컬의 원리를 다룬 전문 칼럼 모음집입니다.</div>
+            <div class="subtitle">무작정 손가락만 혹사시키지 마세요. 게임 피지컬의 원리를 다룬 전문 칼럼을 읽어보세요.</div>
         </header>
 
         <ul class="article-list">
-            <li><a href="col_01_aging.html">에이징 커브는 거짓이다: 뇌 가소성과 반응속도의 비밀</a></li>
-            <li><a href="col_02.html">두 번째 칼럼 제목을 여기에 적어주세요</a></li>
+            <li>
+                <a href="article_01.html">[제작 의도] 왜 한타만 되면 손이 꼬일까? : 순간적 인지 과부하와 피지컬 트레이닝</a>
+            </li>
+            <li>
+                <a href="article_02.html">[칼럼] 피지컬 훈련이 솔랭 티어를 올리는 진짜 이유 (feat. 인지과학)</a>
+            </li>
         </ul>
     </div>
 </body>
