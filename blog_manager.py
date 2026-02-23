@@ -4,10 +4,10 @@ import os
 import glob
 import subprocess
 from datetime import datetime
-import markdown  # nl2br 확장을 사용해 메모장처럼 엔터치면 자동 줄바꿈 적용
+import markdown
+import re  # 특수문자 필터링용 마취총
 
 
-# --- 1. 사이트 자동 생성 엔진 (build.py 통합) ---
 def rebuild_site():
     POSTS_DIR = 'posts'
     TEMPLATE_POST = 'templates/post_layout.html'
@@ -19,16 +19,16 @@ def rebuild_site():
         blog_template = f.read()
 
     articles = []
-    # 모든 글 변환
     for file_path in glob.glob(f'{POSTS_DIR}/*.md'):
         with open(file_path, 'r', encoding='utf-8') as f:
             lines = f.readlines()
+
+        if len(lines) < 3: continue  # 빈 파일 무시
 
         title = lines[0].replace('Title:', '').strip()
         date = lines[1].replace('Date:', '').strip()
         content_md = ''.join(lines[3:])
 
-        # extensions=['nl2br'] 덕분에 마크다운을 몰라도 엔터만 치면 줄바꿈이 완벽히 적용됩니다.
         content_html = markdown.markdown(content_md, extensions=['nl2br'])
         output_filename = os.path.basename(file_path).replace('.md', '.html')
 
@@ -39,7 +39,6 @@ def rebuild_site():
 
         articles.append({'title': title, 'date': date, 'link': output_filename})
 
-    # 게시판 업데이트
     articles.sort(key=lambda x: x['date'], reverse=True)
     list_html = ""
     for article in articles:
@@ -50,20 +49,19 @@ def rebuild_site():
         f.write(final_blog_html)
 
 
-# --- 2. 깃허브 자동 발행 함수 ---
 def git_push(commit_msg):
     try:
         subprocess.run(["git", "add", "."], check=True, creationflags=subprocess.CREATE_NO_WINDOW)
-        subprocess.run(["git", "commit", "-m", commit_msg], check=True, creationflags=subprocess.CREATE_NO_WINDOW)
+        # 내용이 안 바뀌었을 때 나는 에러를 무시하도록 check=False 적용
+        subprocess.run(["git", "commit", "-m", commit_msg], creationflags=subprocess.CREATE_NO_WINDOW)
         subprocess.run(["git", "push"], check=True, creationflags=subprocess.CREATE_NO_WINDOW)
         return True
     except Exception as e:
-        messagebox.showerror("깃허브 연결 오류", "GitHub Desktop으로 폴더가 연동되어 있는지 확인하세요!")
+        messagebox.showerror("알림", "업로드 중 문제가 발생했습니다.\n(인터넷 연결을 확인하시거나, 잠시 후 다시 시도해주세요.)")
         return False
 
 
-# --- 3. GUI 동작 로직 ---
-current_file_path = None  # 현재 수정 중인 파일 경로
+current_file_path = None
 
 
 def load_post_list():
@@ -110,17 +108,15 @@ def save_and_publish():
         messagebox.showwarning("오류", "제목과 본문을 입력하세요.")
         return
 
-    # 새 글일 경우 파일명 생성
     if not current_file_path:
         date_str = datetime.now().strftime("%Y-%m-%d")
-        safe_title = title.replace(" ", "_").replace("/", "-")
+        # 윈도우에서 에러를 뿜는 특수문자 완벽 제거 (이 부분이 핵심!)
+        safe_title = re.sub(r'[\\/*?:"<>|]', "", title).replace(" ", "_")
         current_file_path = f"posts/{date_str}_{safe_title}.md"
     else:
-        # 기존 파일 수정 시 날짜 유지
         with open(current_file_path, 'r', encoding='utf-8') as f:
             date_str = f.readlines()[1].replace('Date:', '').strip()
 
-    # 마크다운 파일 저장 (일반 메모장처럼 적어도 알아서 줄바꿈됨)
     with open(current_file_path, 'w', encoding='utf-8') as f:
         f.write(f"Title: {title}\n")
         f.write(f"Date: {date_str}\n\n")
@@ -138,7 +134,6 @@ def delete_post():
     if not current_file_path: return
 
     if messagebox.askyesno("삭제 확인", "정말로 이 글을 삭제하시겠습니까?"):
-        # 마크다운 및 연결된 HTML 파일 동시 삭제
         os.remove(current_file_path)
         html_file = current_file_path.replace('posts/', '').replace('.md', '.html')
         if os.path.exists(html_file):
@@ -151,13 +146,11 @@ def delete_post():
             clear_editor()
 
 
-# --- 4. 화면 구성 (GUI) ---
 root = tk.Tk()
 root.title("LOLPhysical 블로그 매니저")
 root.geometry("850x600")
 root.configure(bg="#0a0a0c")
 
-# 왼쪽 프레임 (글 목록)
 frame_left = tk.Frame(root, bg="#0a0a0c")
 frame_left.pack(side=tk.LEFT, fill=tk.Y, padx=20, pady=20)
 
@@ -169,7 +162,6 @@ listbox.bind('<<ListboxSelect>>', on_select_post)
 tk.Button(frame_left, text="✨ 새 글 쓰기", command=clear_editor, bg="#333", fg="#fff").pack(pady=10, fill=tk.X)
 tk.Button(frame_left, text="🗑️ 글 삭제하기", command=delete_post, bg="#cc0000", fg="#fff").pack(fill=tk.X)
 
-# 오른쪽 프레임 (에디터)
 frame_right = tk.Frame(root, bg="#0a0a0c")
 frame_right.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=20, pady=20)
 
