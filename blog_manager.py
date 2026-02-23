@@ -5,7 +5,7 @@ import glob
 import subprocess
 from datetime import datetime
 import markdown
-import re  # 특수문자 필터링용 마취총
+import re
 
 
 def rebuild_site():
@@ -23,7 +23,7 @@ def rebuild_site():
         with open(file_path, 'r', encoding='utf-8') as f:
             lines = f.readlines()
 
-        if len(lines) < 3: continue  # 빈 파일 무시
+        if len(lines) < 3: continue
 
         title = lines[0].replace('Title:', '').strip()
         date = lines[1].replace('Date:', '').strip()
@@ -37,12 +37,14 @@ def rebuild_site():
         with open(output_filename, 'w', encoding='utf-8') as f:
             f.write(final_html)
 
+        # 큰따옴표("")로 감싸서 작은따옴표(') 충돌 완벽 방지
         articles.append({'title': title, 'date': date, 'link': output_filename})
 
     articles.sort(key=lambda x: x['date'], reverse=True)
     list_html = ""
     for article in articles:
-        list_html += f"<li><a href='{article['link']}'>{article['title']}</a><span style='color:#666; font-size:0.9rem; margin-left:15px;'>{article['date']}</span></li>\n"
+        # href 묶는 기호를 큰따옴표로 변경하여 에러 방지
+        list_html += f'<li><a href="{article["link"]}">{article["title"]}</a><span style="color:#666; font-size:0.9rem; margin-left:15px;">{article["date"]}</span></li>\n'
 
     final_blog_html = blog_template.replace('{{article_list}}', list_html)
     with open('blog.html', 'w', encoding='utf-8') as f:
@@ -52,12 +54,11 @@ def rebuild_site():
 def git_push(commit_msg):
     try:
         subprocess.run(["git", "add", "."], check=True, creationflags=subprocess.CREATE_NO_WINDOW)
-        # 내용이 안 바뀌었을 때 나는 에러를 무시하도록 check=False 적용
         subprocess.run(["git", "commit", "-m", commit_msg], creationflags=subprocess.CREATE_NO_WINDOW)
         subprocess.run(["git", "push"], check=True, creationflags=subprocess.CREATE_NO_WINDOW)
         return True
     except Exception as e:
-        messagebox.showerror("알림", "업로드 중 문제가 발생했습니다.\n(인터넷 연결을 확인하시거나, 잠시 후 다시 시도해주세요.)")
+        messagebox.showerror("알림", "업로드 중 문제가 발생했습니다.")
         return False
 
 
@@ -110,8 +111,8 @@ def save_and_publish():
 
     if not current_file_path:
         date_str = datetime.now().strftime("%Y-%m-%d")
-        # 윈도우에서 에러를 뿜는 특수문자 완벽 제거 (이 부분이 핵심!)
-        safe_title = re.sub(r'[\\/*?:"<>|]', "", title).replace(" ", "_")
+        # ★ 한글, 영문, 숫자, 공백만 남기고 모든 특수문자 완벽 삭제
+        safe_title = re.sub(r'[^\w\s가-힣]', '', title).strip().replace(" ", "_")
         current_file_path = f"posts/{date_str}_{safe_title}.md"
     else:
         with open(current_file_path, 'r', encoding='utf-8') as f:
