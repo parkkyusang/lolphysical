@@ -1,178 +1,41 @@
----
-layout: null
----
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="롤(LoL) 피지컬 종합 훈련소. 반응속도, 카이팅, 동체시력을 끌어올리는 뇌과학 기반 에임 트레이닝. 당신의 진짜 티어를 확인하세요.">
-    <title>LoL 피지컬 트레이너 - LOLPhysical.xyz</title>
+    <title>{{ page.title }} - LOLPhysical</title>
     <style>
-        body { margin: 0; background-color: #0a0a0c; color: #e0e0e0; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; line-height: 1.6; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
+        body { margin: 0; background-color: #0a0a0c; color: #e0e0e0; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        header { text-align: center; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 30px; }
+        h1.post-title { color: #00ffcc; font-size: 2.2rem; margin-bottom: 10px; word-break: keep-all; }
+        .post-meta { color: #888; font-size: 0.95rem; }
         
-        header { text-align: center; margin-bottom: 50px; width: 100%; }
-        h1 { color: #fff; text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); margin: 0; font-size: 3rem; word-break: keep-all; letter-spacing: -1px; }
-        .subtitle { color: #aaa; font-size: 1.2rem; margin-top: 15px; }
-        .highlight { color: #00ffcc; font-weight: bold; }
-
-        .card-container { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; width: 100%; margin-bottom: 50px; }
+        /* 본문 텍스트 스타일 */
+        .post-content { background-color: #111; padding: 40px; border-radius: 12px; border: 1px solid #222; font-size: 1.1rem; line-height: 1.8; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .post-content h2 { color: #fff; border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 40px; }
+        .post-content h3 { color: #ff3366; margin-top: 30px; }
+        .post-content p { color: #bbb; margin-bottom: 20px; }
+        .post-content img { max-width: 100%; border-radius: 8px; margin: 20px 0; border: 1px solid #333; }
         
-        .game-card {
-            background-color: #1a1a1d; border: 2px solid #333; border-radius: 15px; padding: 40px 30px;
-            width: 320px; text-decoration: none; color: #fff; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; overflow: hidden;
-        }
-        .game-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #333; transition: 0.3s; }
-        .game-card:hover { transform: translateY(-10px); background-color: #222; }
-        
-        .card-tracking:hover { border-color: #00ffcc; box-shadow: 0 15px 30px rgba(0, 255, 204, 0.15); }
-        .card-tracking:hover::before { background: #00ffcc; }
-        .card-tracking h2 { color: #00ffcc; }
-
-        .card-kiting:hover { border-color: #ff3366; box-shadow: 0 15px 30px rgba(255, 51, 102, 0.15); }
-        .card-kiting:hover::before { background: #ff3366; }
-        .card-kiting h2 { color: #ff3366; }
-
-        .game-card h2 { margin: 0 0 15px 0; font-size: 1.8rem; }
-        .game-card p { color: #aaa; font-size: 15px; margin: 0 0 25px 0; line-height: 1.5; word-break: keep-all; }
-        
-        .play-btn { background: #333; color: #fff; padding: 10px 25px; border-radius: 30px; font-weight: bold; font-size: 14px; transition: 0.3s; }
-        .card-tracking:hover .play-btn { background: #00ffcc; color: #000; }
-        .card-kiting:hover .play-btn { background: #ff3366; color: #fff; }
-
-        .article-section {
-            background-color: #111; border: 1px solid #222; border-radius: 15px;
-            padding: 50px; max-width: 900px; width: 100%; box-sizing: border-box;
-            margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .article-section h2 { color: #fff; font-size: 2rem; border-bottom: 2px solid #333; padding-bottom: 15px; margin-top: 0; }
-        .article-section h3 { color: #00ffcc; font-size: 1.4rem; margin-top: 40px; margin-bottom: 15px; }
-        .article-section h3.accent { color: #ff3366; }
-        .article-section p { color: #bbb; font-size: 1.05rem; line-height: 1.8; margin-bottom: 20px; text-align: justify; }
-        .article-section strong { color: #fff; }
-        
-        .image-wrapper { margin: 40px 0; text-align: center; }
-        .image-wrapper img { width: 100%; max-width: 700px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 1px solid #333; }
-        .image-caption { color: #888; font-size: 13.5px; margin-top: 12px; font-style: italic; }
-
-        .quote-box {
-            border-left: 4px solid #ff3366; background-color: rgba(255, 51, 102, 0.05);
-            padding: 20px; border-radius: 0 8px 8px 0; margin: 30px 0; font-style: italic; color: #ddd;
-        }
-
-        .science-board { 
-            width: 100%; max-width: 900px; background-color: #161619; 
-            border: 1px solid #333; border-radius: 12px; padding: 40px; box-sizing: border-box; 
-            margin-bottom: 40px;
-        }
-        .science-board h3 { margin: 0 0 15px 0; color: #fff; font-size: 1.6rem; display: flex; align-items: center; gap: 10px; }
-        .science-board h3::before { content: '📚'; font-size: 1.8rem; }
-        
-        .article-list { list-style: none; padding: 0; margin: 0; }
-        .article-list li { border-bottom: 1px solid #2a2a2d; padding: 18px 0; display: flex; justify-content: space-between; align-items: center; }
-        .article-list li:last-child { border-bottom: none; }
-        .article-list a { color: #ccc; text-decoration: none; font-size: 16px; font-weight: 500; transition: color 0.2s; flex-grow: 1; }
-        .article-list a:hover { color: #00ffcc; text-decoration: underline; }
-        .badge-ready { background: #222; color: #00ffcc; font-size: 12px; padding: 4px 10px; border-radius: 12px; white-space: nowrap; margin-left: 15px; border: 1px solid #00ffcc; }
-
-        /* 방명록 스타일 */
-        .comment-section {
-            width: 100%; max-width: 900px; padding: 20px; 
-            background: #1a1a1d; border-radius: 12px; 
-            margin-bottom: 40px; border: 1px solid #333; box-sizing: border-box;
-        }
-
-        footer { margin-top: 20px; padding: 30px; text-align: center; font-size: 13px; color: #555; border-top: 1px solid #1a1a1d; width: 100%; }
-        footer a { color: #888; text-decoration: none; transition: 0.2s; }
-        footer a:hover { color: #fff; }
+        .back-btn { display: inline-block; margin-top: 40px; color: #00ffcc; text-decoration: none; font-weight: bold; border: 1px solid #00ffcc; padding: 10px 25px; border-radius: 30px; transition: 0.2s; }
+        .back-btn:hover { background: rgba(0, 255, 204, 0.1); }
     </style>
 </head>
 <body>
-
     <div class="container">
         <header>
-            <h1>LoL 피지컬 종합 훈련소</h1>
-            <div class="subtitle">당신의 진짜 티어를 증명할 시간이 왔습니다. <span class="highlight">훈련을 선택하세요.</span></div>
+            <h1 class="post-title">{{ page.title }}</h1>
+            <div class="post-meta">{{ page.date | date: "%Y년 %m월 %d일" }} 작성</div>
         </header>
-
-        <div class="card-container">
-            <a href="tracking.html" class="game-card card-tracking">
-                <h2>뇌·손 협응 예열</h2>
-                <p>랭크 게임 전, 굳어있는 신경을 깨우세요.<br>마우스 에임과 자주 누르는 스킬 키 간의<br>정밀한 협응력을 끌어올리는 훈련입니다.</p>
-                <div class="play-btn">입장하기</div>
-            </a>
-
-            <a href="kiting.html" class="game-card card-kiting">
-                <h2>실전 카이팅 생존</h2>
-                <p>몰려오는 브루저, 발밑에 깔리는 스킬샷.<br>거리 재기(Spacing)와 무빙을 섞어<br>극한의 누적 딜량을 뽑아내십시오.</p>
-                <div class="play-btn">입장하기</div>
-            </a>
-        </div>
-
-        <article class="article-section">
-            <h2>진짜 '피지컬'이란 무엇인가?</h2>
-            
-            <p>리그 오브 레전드(LoL)를 플레이하다 보면 흔히 <strong>"나는 뇌지컬은 챌린저인데 피지컬이 안 좋아서 티어가 낮다"</strong>고 한탄하는 유저들을 쉽게 볼 수 있습니다. 그렇다면 우리가 흔히 말하는 '피지컬(Physical)'의 본질은 과연 무엇일까요? 단순히 손가락이 빠른 것을 의미할까요?</p>
-
-            <p>e스포츠 과학과 인지심리학적 관점에서 볼 때, 롤에서 요구하는 피지컬은 크게 세 가지 핵심 신경망의 결합으로 이루어집니다. <strong>1) 시각적 정보 처리(동체시력), 2) 정확한 운동 신경(마우스 에임), 그리고 3) 이 둘을 연결하는 뇌·손 협응력(Hand-Eye Coordination)</strong>입니다.</p>
-
-            <div class="image-wrapper">
-                <img src="cognitive.png" alt="한타 상황에서의 인지 병목 현상과 절차 기억을 통한 자동화 경로 도식화">
-                <div class="image-caption">[도식] 복잡한 한타 상황에서의 인지 병목(좌측)과 절차 기억을 통한 척수 반사적 자동화 경로(우측)</div>
-            </div>
-
-            <h3>뇌신경 가소성(Neuroplasticity): 피지컬은 재능인가, 노력인가?</h3>
-            <p>위 도식에서 볼 수 있듯, 초보자는 한타(Teamfight) 상황에서 여러 자극이 동시에 들어오면 뇌의 인지적 병목(Cognitive Bottleneck)을 겪으며 입력 지연(Input Delay)이 발생합니다. 하지만 신경학자들의 연구에 따르면 인간의 뇌는 반복적인 자극에 의해 신경 회로를 재구성하는 <strong>'신경 가소성'</strong>을 가지고 있습니다.</p>
-
-            <p>프로게이머들이 상대의 점멸이나 논타겟 스킬을 보고 '반사적으로' 반응하는 것은 단순한 재능이 아닙니다. 수만 번의 반복 학습을 통해 특정 상황에 대한 신경 전달 경로(미엘린 수초)가 두꺼워져, 대뇌피질을 거치는 느린 과정을 생략하고 기저핵(Basal Ganglia)을 통한 <strong>자동화(Automated Pathway)</strong>가 이루어진 결과입니다.</p>
-
-            <div class="quote-box">
-                "진정한 피지컬은 날아오는 스킬을 '보고' 피하는 것이 아니라, 상대의 모션을 뇌가 인식하는 즉시 손가락이 이미 움직여 있는 상태를 뜻한다."
-            </div>
-
-            <h3 class="accent">랭크 게임 전 '손풀기'가 선택이 아닌 필수인 이유</h3>
-            <p>근육을 사용하는 스포츠 선수들이 본 경기에 앞서 스트레칭과 웜업을 하듯, 뇌와 미세 소근육을 사용하는 e스포츠에서도 <strong>'신경 예열'</strong>은 절대적입니다. 자고 일어났거나, 퇴근 후 지친 상태에서 첫 판을 돌리면 마우스 커서가 챔피언 위를 헛돌고 스킬 콤보가 꼬이는 경험을 해보셨을 것입니다.</p>
-
-            <p>LOLPhysical.xyz가 제공하는 <strong>[뇌·손 협응 예열 훈련]</strong>과 <strong>[실전 카이팅 생존]</strong>은 바로 이 굳어있는 신경망을 단기간에 극도로 자극하기 위해 설계되었습니다. 실제 인게임에서 가장 많이 사용되는 마우스 이동 거리(Flick)와 클릭 타이밍을 압축하여 반복 숙달시키는 시스템입니다.</p>
-
-            <p>랭크 게임을 돌리기 전, 이 훈련소에서 단 5분만 투자해 보십시오. 마우스가 커서가 내 생각과 일치하여 챔피언에 정확히 꽂히는 <strong>'몰입 상태(Flow State)'</strong>를 경험하시게 될 것입니다.</p>
+        
+        <article class="post-content">
+            {{ content }}
         </article>
 
-        <div class="science-board">
-            <h3>피지컬 & 뇌과학 아카이브</h3>
-            <p style="font-size:14px; color:#888; margin-top:-10px; margin-bottom:20px;">무작정 손가락만 혹사시키지 마세요. 게임 피지컬의 원리를 다룬 전문 칼럼을 읽어보세요.</p>
-            
-            <ul class="article-list">
-                {% for post in site.posts %}
-                <li>
-                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-                    <span class="badge-ready">{{ post.date | date: "%y.%m.%d" }}</span>
-                </li>
-                {% endfor %}
-            </ul>
+        <div style="text-align: center;">
+            <a href="{{ '/' | relative_url }}" class="back-btn">← 로비로 돌아가기</a>
         </div>
-
-        <div class="comment-section">
-            <h3 style="text-align:center; color:#ccc;">훈련소 통합 방명록</h3>
-            <p style="text-align:center; font-size:14px; color:#666; margin-bottom:20px;">자유롭게 훈련 후기나 건의사항을 남겨주세요.</p>
-            <div id="utterances-container">
-                <script src="https://utteranc.es/client.js"
-                        repo="parkkyusang/lolphysical"
-                        issue-term="pathname"
-                        theme="github-dark"
-                        crossorigin="anonymous"
-                        async>
-                </script>
-            </div>
-        </div>
-
-        <footer>
-            <p>© 2026 LoL Physical Trainer. All rights reserved. | <a href="privacy.html">개인정보처리방침(Privacy Policy)</a></p>
-            <p style="margin-top: 5px; font-size: 11px; color: #444;">이 사이트는 라이엇 게임즈와 공식적으로 연관되어 있지 않으며, 플레이어의 피지컬 향상을 위해 자체 제작된 트레이닝 웹사이트입니다.</p>
-        </footer>
     </div>
-
 </body>
 </html>
