@@ -1,0 +1,48 @@
+---
+layout: null
+permalink: /blog.html
+---
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>피지컬 & 뇌과학 아카이브 - LOLPhysical</title>
+    <style>
+        body { margin: 0; background-color: #0a0a0c; color: #e0e0e0; font-family: 'Pretendard', sans-serif; line-height: 1.6; }
+        .container { max-width: 900px; margin: 40px auto; padding: 20px; }
+        header { text-align: center; margin-bottom: 50px; border-bottom: 1px solid #333; padding-bottom: 30px; }
+        h1 { color: #fff; font-size: 2.5rem; margin: 0; }
+        .subtitle { color: #888; font-size: 1.1rem; margin-top: 10px; }
+        
+        .article-list { list-style: none; padding: 0; margin: 0; background: #111; border-radius: 12px; border: 1px solid #222; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .article-list li { border-bottom: 1px solid #2a2a2d; padding: 20px 10px; display: flex; justify-content: space-between; align-items: center; }
+        .article-list li:last-child { border-bottom: none; }
+        .article-list a { color: #e0e0e0; text-decoration: none; font-size: 1.1rem; font-weight: bold; transition: 0.2s; flex-grow: 1; }
+        .article-list a:hover { color: #00ffcc; text-decoration: underline; }
+        .post-date { color: #666; font-size: 0.9rem; white-space: nowrap; margin-left: 20px; }
+        
+        .back-btn { display: inline-block; margin-bottom: 20px; color: #00ffcc; text-decoration: none; font-weight: bold; padding: 8px 15px; border: 1px solid #00ffcc; border-radius: 20px; transition: 0.2s; }
+        .back-btn:hover { background: rgba(0, 255, 204, 0.1); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← 로비로 돌아가기</a>
+        
+        <header>
+            <h1>📚 피지컬 & 뇌과학 아카이브</h1>
+            <div class="subtitle">게임 피지컬의 원리를 다룬 전문 칼럼 모음집입니다.</div>
+        </header>
+
+        <ul class="article-list">
+            {% for post in site.posts %}
+            <li>
+                <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                <span class="post-date">{{ post.date | date: "%Y.%m.%d" }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
